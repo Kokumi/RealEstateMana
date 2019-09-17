@@ -26,4 +26,11 @@ public class ExampleUnitTest {
 
         assertEquals(11,toTest);
     }
+
+    @Test
+    public void DateTranslate(){    //warning test valid only the 17 september
+        String toTest = Utils.getTodayDate();
+
+        assertEquals("17/09/2019",toTest);
+    }
 }
