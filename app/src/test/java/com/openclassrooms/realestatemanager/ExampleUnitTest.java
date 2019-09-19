@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager;
 
+import com.openclassrooms.realestatemanager.model.Utils;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;

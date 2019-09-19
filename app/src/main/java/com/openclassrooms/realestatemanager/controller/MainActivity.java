@@ -1,8 +1,11 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
