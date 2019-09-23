@@ -13,8 +13,6 @@ import com.openclassrooms.realestatemanager.R
  * Created by Debruyckère Florian on 20/09/2019.
  */
 
-//TODO: DO THIS IN JAVA , ALL PROBLEM WILL BE SOLVED
-
 class RealEstateAdapter(private val pData : Array<RealEstate>) :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,7 +37,7 @@ class RealEstateAdapter(private val pData : Array<RealEstate>) :  RecyclerView.A
 
         fun display(pRealEstate: RealEstate){
             typeView.text = pRealEstate.type
-            priceView.text = pRealEstate.price
+            priceView.text = "${pRealEstate.price}"
             cityView.text = pRealEstate.city
         }
     }

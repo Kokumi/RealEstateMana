@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.DetailFragment">
+
+    <TextView
+        android:id="@+id/fragment_media_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Media"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_margin="10dp"/>
+    <Button
+        android:id="@+id/fragment_media"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/fragment_media_title"/>
+
+
+    <TextView
+        android:id="@+id/fragment_description_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_below="@id/fragment_media"
+        android:layout_margin="10dp"/>
+    <TextView
+        android:id="@+id/fragment_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:text="this text is just an example as description text.
+It long just to have make the body of this screen properly."
+        android:layout_below="@id/fragment_description_title"
+        android:layout_margin="10dp"/>
+
+
+    <TextView
+        android:id="@+id/fragment_surface_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="surface"
+        android:textStyle="bold"
+        android:layout_below="@+id/fragment_description_text"
+        android:layout_marginStart="15dp" />
+    <TextView
+        android:id="@+id/fragment_surface_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0m"
+        android:layout_below="@id/fragment_surface_title"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="40dp"/>
+
+
+    <TextView
+        android:id="@+id/fragment_room_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="number of room"
+        android:layout_below="@id/fragment_surface_text"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"/>
+    <TextView
+        android:id="@+id/fragment_room_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_below="@id/fragment_room_title"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="40dp"/>
+
+
+    <TextView
+        android:id="@+id/fragment_bathroom_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="number of bathroom"
+        android:layout_below="@id/fragment_room_text"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"/>
+    <TextView
+        android:id="@+id/fragment_bathroom_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_below="@id/fragment_bathroom_title"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="40dp"/>
+
+    <TextView
+        android:id="@+id/fragment_bedroom_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="number of bedroom"
+        android:layout_below="@id/fragment_room_text"
+        android:layout_toEndOf="@id/fragment_bathroom_title"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"/>
+    <TextView
+        android:id="@+id/fragment_bedroom_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_below="@id/fragment_bedroom_title"
+        android:layout_toEndOf="@id/fragment_bathroom_text"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="140dp"/>
+
+
+    <TextView
+        android:id="@+id/fragment_location_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="location"
+        android:layout_below="@id/fragment_description_text"
+        android:layout_toEndOf="@id/fragment_surface_title"
+        android:layout_marginStart="230dp" />
+    <TextView
+        android:id="@+id/fragment_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 something
+        \n apt 6A
+        \n somewhere
+        \n NL 00000 \n nowhereland"
+        android:layout_below="@id/fragment_location_title"
+        android:layout_toEndOf="@id/fragment_surface_text"
+        android:layout_marginStart="230dp"/>
+</RelativeLayout>

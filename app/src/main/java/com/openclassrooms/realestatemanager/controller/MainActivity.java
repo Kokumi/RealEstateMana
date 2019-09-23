@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         configureAdapter();
-
+        configureFragment();
     }
 
     /*private void configureTextViewMain(){
@@ -45,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureAdapter(){
         ArrayList<Interess> inte = new ArrayList<>();
-        RealEstate estate = new RealEstate(1,"type","0$",0,0,"des",
-                "address","city",inte,new Statut(0,"not"),"0",
+        RealEstate estate = new RealEstate(1,"type",0,0,0,"des",
+                "address","city",inte,"not","0",
                 "0",new Agent(0,"nom","tele"));
 
         ArrayList<RealEstate> data = new ArrayList<>();
@@ -57,5 +59,12 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.main_List);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void configureFragment(){
+        FragmentTransaction fT = getSupportFragmentManager().beginTransaction();
+        DetailFragment fragment = new DetailFragment();
+        fT.add(R.id.main_detail_fragment,fragment);
+        fT.commit();
     }
 }
