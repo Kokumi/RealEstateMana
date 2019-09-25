@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         RealEstate[] dataB = {estate};
 
         data.add(estate);
-        RealEstateAdapter adapter = new RealEstateAdapter(dataB);
+        RealEstateAdapter adapter = new RealEstateAdapter(dataB,this);
         RecyclerView recyclerView = findViewById(R.id.main_List);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);

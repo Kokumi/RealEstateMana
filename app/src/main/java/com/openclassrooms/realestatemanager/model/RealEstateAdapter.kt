@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.model
 
 //import android.support.v7.widget.RecyclerView
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +10,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.controller.DetailFragment
 
 /**
  * Created by Debruyckère Florian on 20/09/2019.
  */
 
-class RealEstateAdapter(private val pData : Array<RealEstate>) :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
+class RealEstateAdapter(private val pData : Array<RealEstate>, private val pContext : Context) :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -25,7 +30,7 @@ class RealEstateAdapter(private val pData : Array<RealEstate>) :  RecyclerView.A
     override fun getItemCount() = pData.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.display(pData[position])
+        holder.display(pData[position],pContext)
     }
 
     class ViewHolder(private val cellView: View) : RecyclerView.ViewHolder(cellView){
@@ -34,11 +39,18 @@ class RealEstateAdapter(private val pData : Array<RealEstate>) :  RecyclerView.A
         private val typeView : TextView = cellView.findViewById(R.id.cell_type)
         private val priceView : TextView = cellView.findViewById(R.id.cell_price)
         private val cityView : TextView = cellView.findViewById(R.id.cell_city)
+        private final val EXTRA_REAL_ESTATE = "RealEstate"
 
-        fun display(pRealEstate: RealEstate){
+        fun display(pRealEstate: RealEstate, pContext: Context){
             typeView.text = pRealEstate.type
             priceView.text = "${pRealEstate.price}"
             cityView.text = pRealEstate.city
+
+            cellView.setOnClickListener {
+                val intent = Intent(pContext, DetailFragment::class.java)
+                intent.putExtra(EXTRA_REAL_ESTATE,pRealEstate)
+                pContext.startActivity(intent)
+            }
         }
     }
 }
