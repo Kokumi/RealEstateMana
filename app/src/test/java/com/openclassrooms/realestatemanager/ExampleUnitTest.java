@@ -4,6 +4,11 @@ import com.openclassrooms.realestatemanager.model.Utils;
 
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import static org.junit.Assert.*;
 
 /**
@@ -30,9 +35,12 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void DateTranslate(){    //warning test valid only the 17 september
+    public void DateTranslate(){
         String toTest = Utils.getTodayDate();
 
-        assertEquals("17/09/2019",toTest);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        String exemple = dateFormat.format(new Date());
+
+        assertEquals(exemple,toTest);
     }
 }
