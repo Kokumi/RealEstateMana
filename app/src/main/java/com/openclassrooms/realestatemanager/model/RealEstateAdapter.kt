@@ -16,7 +16,7 @@ import com.openclassrooms.realestatemanager.controller.DetailFragment
  * Created by Debruyckère Florian on 20/09/2019.
  */
 
-class RealEstateAdapter(private val pData : Array<RealEstate>, private val pContext : Context) :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
+class RealEstateAdapter(private val pData : ArrayList<RealEstate>, private val pContext : Context) :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
 
 
 
@@ -39,7 +39,7 @@ class RealEstateAdapter(private val pData : Array<RealEstate>, private val pCont
         private val typeView : TextView = cellView.findViewById(R.id.cell_type)
         private val priceView : TextView = cellView.findViewById(R.id.cell_price)
         private val cityView : TextView = cellView.findViewById(R.id.cell_city)
-        private final val EXTRA_REAL_ESTATE = "RealEstate"
+        private val extraRealEstate = "RealEstate"
 
         fun display(pRealEstate: RealEstate, pContext: Context){
             typeView.text = pRealEstate.type
@@ -48,7 +48,7 @@ class RealEstateAdapter(private val pData : Array<RealEstate>, private val pCont
 
             cellView.setOnClickListener {
                 val intent = Intent(pContext, DetailFragment::class.java)
-                intent.putExtra(EXTRA_REAL_ESTATE,pRealEstate)
+                intent.putExtra(extraRealEstate,pRealEstate)
                 pContext.startActivity(intent)
             }
         }

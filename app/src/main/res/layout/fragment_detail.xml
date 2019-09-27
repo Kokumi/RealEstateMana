@@ -5,6 +5,28 @@
     android:layout_height="match_parent"
     tools:context=".controller.DetailFragment">
 
+    <FrameLayout
+        android:id="@+id/fragment_warning_layout"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_toEndOf="@id/fragment_surface_title"
+        android:layout_below="@id/fragment_description_title"
+        android:background="#EED68383"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/fragment_warning_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select a Real Estate"
+            android:textSize="30sp"
+            android:textColor="#111111"
+            android:layout_marginTop="55dp"
+            android:layout_marginStart="5dp"
+            />
+    </FrameLayout>
+
+
     <TextView
         android:id="@+id/fragment_media_title"
         android:layout_width="wrap_content"

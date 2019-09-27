@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
                 "0",new Agent(0,"nom","tele"));
 
         ArrayList<RealEstate> data = new ArrayList<>();
-        RealEstate[] dataB = {estate};
+        //RealEstate[] dataB = {estate};
 
         data.add(estate);
-        RealEstateAdapter adapter = new RealEstateAdapter(dataB,this);
+        RealEstateAdapter adapter = new RealEstateAdapter(data,this);
         RecyclerView recyclerView = findViewById(R.id.main_List);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
