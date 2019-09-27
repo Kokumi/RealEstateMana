@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.RealEstate
+import java.lang.StringBuilder
 
 /**
  * Fragment to show Detail of a RealEstate
@@ -42,10 +43,14 @@ class DetailFragment : Fragment() {
         val surfaceText = pView.findViewById(R.id.fragment_surface_text) as TextView
 
 
+
         if(pRealEstate != null) {
             warningLayout.visibility = View.GONE
             descriptionText.text = pRealEstate.description
-            locationText.text = pRealEstate.address
+            locationText.text = StringBuilder("${pRealEstate.address.address}\n" +
+                    "${pRealEstate.address.appartement}\n" +
+                    "${pRealEstate.address.city}\n$" +
+                    {pRealEstate.address.country})
             roomText.text = pRealEstate.room.toString()
             surfaceText.text = pRealEstate.surface.toString()
         }else{
@@ -53,5 +58,4 @@ class DetailFragment : Fragment() {
         }
 
     }
-
 }

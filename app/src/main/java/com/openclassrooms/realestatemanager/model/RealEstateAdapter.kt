@@ -44,7 +44,7 @@ class RealEstateAdapter(private val pData : ArrayList<RealEstate>, private val p
         fun display(pRealEstate: RealEstate, pContext: Context){
             typeView.text = pRealEstate.type
             priceView.text = "${pRealEstate.price}"
-            cityView.text = pRealEstate.city
+            cityView.text = pRealEstate.address.city
 
             cellView.setOnClickListener {
                 val intent = Intent(pContext, DetailFragment::class.java)

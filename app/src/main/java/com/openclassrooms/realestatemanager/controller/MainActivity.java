@@ -1,22 +1,19 @@
 package com.openclassrooms.realestatemanager.controller;
 
-//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-//import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.Address;
 import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Interess;
+import com.openclassrooms.realestatemanager.model.Price;
 import com.openclassrooms.realestatemanager.model.RealEstate;
 import com.openclassrooms.realestatemanager.model.RealEstateAdapter;
-import com.openclassrooms.realestatemanager.model.Statut;
 import com.openclassrooms.realestatemanager.model.Utils;
 
 import java.util.ArrayList;
@@ -47,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureAdapter(){
         ArrayList<Interess> inte = new ArrayList<>();
-        RealEstate estate = new RealEstate(1,"type",0,0,0,"des",
-                "address","city",inte,"not","0",
+        RealEstate estate = new RealEstate(1,"type",new Price(5000000,false),0,0,"des",
+                new Address("There","10a","Citycity","land"),inte,"not","0",
                 "0",new Agent(0,"nom","tele"));
 
         ArrayList<RealEstate> data = new ArrayList<>();
