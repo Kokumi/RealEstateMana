@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.openclassrooms.realestatemanager.SecondActivity"></activity>
+        <activity android:name="com.openclassrooms.realestatemanager.controller.DetailFragment"></activity>
     </application>
 
 </manifest>

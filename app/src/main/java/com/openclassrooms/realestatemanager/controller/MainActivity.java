@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.controller;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Interess> inte = new ArrayList<>();
         RealEstate estate = new RealEstate(1,"type",new Price(5000000,false),0,0,"des",
                 new Address("There","10a","Citycity","land"),inte,"not","0",
-                "0",new Agent(0,"nom","tele"));
+                "0",new Agent(0,"nom","tele"),new ArrayList<Bitmap>());
 
         ArrayList<RealEstate> data = new ArrayList<>();
         //RealEstate[] dataB = {estate};
