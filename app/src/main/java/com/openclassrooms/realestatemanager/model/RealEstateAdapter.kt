@@ -44,7 +44,6 @@ class RealEstateAdapter(private val pData : ArrayList<RealEstate>,
         private val typeView : TextView = cellView.findViewById(R.id.cell_type)
         private val priceView : TextView = cellView.findViewById(R.id.cell_price)
         private val cityView : TextView = cellView.findViewById(R.id.cell_city)
-        private val extraRealEstate = "RealEstate"
 
         fun display(pRealEstate: RealEstate, pActivity: AppCompatActivity){
             typeView.text = pRealEstate.type
@@ -52,13 +51,8 @@ class RealEstateAdapter(private val pData : ArrayList<RealEstate>,
             cityView.text = pRealEstate.address.city
 
             cellView.setOnClickListener {
-                val intent = Intent(pActivity.applicationContext, DetailFragment::class.java)
-                /*intent.putExtra(extraRealEstate,pRealEstate)
-                pContext.startActivity(intent)*/
 
                 val dF = DetailFragment.newInstance(pRealEstate)
-                val detailFragment = Fragment.instantiate(pActivity.applicationContext,DetailFragment::class.java.name) as DetailFragment
-                //pActivity.supportFragmentManager.beginTransaction().replace(R.id.main_detail_fragment, detailFragment).commit()
                 pActivity.supportFragmentManager.beginTransaction().replace(R.id.main_detail_fragment, dF).commit()
             }
         }
