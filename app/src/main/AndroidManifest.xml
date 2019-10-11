@@ -12,15 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.openclassrooms.realestatemanager.controller.MainActivity">
+        <activity
+            android:name=".controller.EditActivity"
+            android:label="@string/title_activity_edit"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.openclassrooms.realestatemanager.SecondActivity"></activity>
-        <activity android:name="com.openclassrooms.realestatemanager.controller.DetailFragment"></activity>
+        <activity android:name=".SecondActivity" />
+        <activity android:name=".controller.DetailFragment" />
     </application>
 
 </manifest>

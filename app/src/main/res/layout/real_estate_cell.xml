@@ -9,7 +9,8 @@
         android:layout_width="60dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:src="@drawable/ic_launcher_background" />
+        android:src="@drawable/ic_launcher_background"
+        android:contentDescription="@string/real_estate_description"/>
 
     <TextView
         android:id="@+id/cell_type"
@@ -19,7 +20,7 @@
         android:layout_toEndOf="@id/cell_image"
         android:textColor="#050505"
         android:textStyle="bold"
-        android:text="House"
+        android:text="@string/real_estate_type_base"
         />
 
     <TextView
@@ -31,7 +32,7 @@
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@id/cell_image"
         android:textColor="#303030"
-        android:text="Kirchen bell"
+        android:text="@string/real_estate_city_base"
         />
 
     <TextView
@@ -44,7 +45,7 @@
         android:layout_marginStart="10dp"
         android:textColor="#AA2864"
         android:textSize="16sp"
-        android:text="$10,050,000"
+        android:text="@string/real_estate_price_base"
         />
 
 

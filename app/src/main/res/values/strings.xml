@@ -1,6 +1,29 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_warning">Select a Real Estate</string>
+    <string name="fragment_media_title">Media</string>
+    <string name="fragment_description_title">Description</string>
+    <string name="fragment_description_text">this text is just an example as description text.
+It long just to have make the body of this screen properly.</string>
+    <string name="fragment_surface_title">surface</string>
+    <string name="fragment_surface_base">0m</string>
+    <string name="fragment_room_title">number of room</string>
+    <string name="fragment_room_base">0</string>
+    <string name="fragment_bathroom">number of bathroom</string>
+    <string name="fragment_bedroom">number of bedroom</string>
+    <string name="fragment_location_title">location</string>
+    <string name="fragment_location_base">1 something
+        \n apt 6A
+        \n somewhere
+        \n NL 00000 \n nowhereland</string>
+
+    <string name="media_description">Image of the selected realEstate</string>
+
+    <string name="real_estate_description">First image of the realEstate</string>
+    <string name="real_estate_type_base">House</string>
+    <string name="real_estate_city_base">Nowhere</string>
+    <string name="real_estate_price_base">Not Real</string>
+
+
 </resources>
