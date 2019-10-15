@@ -1,11 +1,13 @@
 package com.openclassrooms.realestatemanager.controller
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +35,7 @@ class DetailFragment : Fragment() {private var realEstateData : RealEstate? = nu
         // Inflate the layout for this fragment
 
         display(view)
+        buttonConfig(view)
 
 
         //return inflater.inflate(R.layout.fragment_detail, container, false)
@@ -67,5 +70,15 @@ class DetailFragment : Fragment() {private var realEstateData : RealEstate? = nu
             warningLayout.visibility = View.VISIBLE
         }
 
+    }
+
+    private fun buttonConfig(pView: View){
+        val editButton = pView.findViewById(R.id.fragment_edit_button) as Button
+
+        editButton.setOnClickListener{
+            val intent = Intent(context,EditActivity::class.java)
+            intent.putExtra("SELECTION",realEstateData)
+            startActivity(intent)
+        }
     }
 }

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         configureAdapter();
         configureFragment();
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"database-name").build();
+        /*AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"database-name").build();
         RealEstate estate = new RealEstate(1,"type",new Price(5000000,false),0,0,"des",
                 new Address("There","10a","Citycity","land"),new ArrayList<Interess>(),"not","0",
                 "0",new Agent(0,"nom","tele"),new ArrayList<String>());
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         db.realEstateDao().insertAll(estate);
         RealEstate test = db.realEstateDao().getAll().get(0);
 
-        System.out.println("saved: " + test.getDescription());
+        System.out.println("saved: " + test.getDescription());*/
     }
 
     /*private void configureTextViewMain(){

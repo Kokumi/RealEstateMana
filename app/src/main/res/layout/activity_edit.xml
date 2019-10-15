@@ -5,9 +5,127 @@
     android:layout_height="match_parent"
     tools:context=".controller.EditActivity">
 
-    <TextView
+
+    <EditText
         android:id="@+id/edit_type"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:inputType="text"
+        android:hint="@string/edit_type"
+        android:autofillHints="@string/edit_type" />
+
+    <EditText
+        android:id="@+id/edit_price"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_type"
+        android:layout_marginStart="10dp"
+        android:inputType="number"
+        android:hint="@string/edit_price"
+        android:autofillHints="@string/edit_price"/>
+
+    <Switch
+        android:id="@+id/edit_price_type"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="40dp"
+        android:text="@string/edit_indollar"
+        android:layout_toEndOf="@id/edit_price"
+        android:layout_below="@id/edit_type"
+        android:layout_marginStart="10dp"
+        />
+
+    <EditText
+        android:id="@+id/edit_surface"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/edit_surface"
+        android:autofillHints="@string/edit_surface"
+        android:layout_below="@id/edit_price"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/edit_description"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/edit_description"
+        android:autofillHints="@string/edit_description"
+        android:layout_below="@id/edit_surface"
+        android:layout_marginStart="10dp"/>
+
+    <EditText
+        android:id="@+id/edit_address"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/edit_address"
+        android:autofillHints="@string/edit_address"
+        android:layout_below="@id/edit_description"
+        android:layout_marginStart="10dp"/>
+
+    <EditText
+        android:id="@+id/edit_city"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/edit_city"
+        android:autofillHints="@string/edit_city"
+        android:layout_below="@id/edit_description"
+        android:layout_toEndOf="@id/edit_address"
+        android:layout_marginStart="10dp"/>
+
+    <EditText
+        android:id="@+id/edit_country"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/edit_country"
+        android:autofillHints="@string/edit_country"
+        android:layout_below="@id/edit_description"
+        android:layout_toEndOf="@id/edit_city"
+        android:layout_marginStart="10dp"/>
+
+    <EditText
+        android:id="@+id/edit_postalcode"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="@string/edit_postal"
+        android:autofillHints="@string/edit_postal"
+        android:layout_below="@id/edit_description"
+        android:layout_toEndOf="@id/edit_country"
+        android:layout_marginStart="10dp"/>
+
+    <EditText
+        android:id="@+id/edit_apartment"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/edit_apartement"
+        android:autofillHints="@string/edit_apartement"
+        android:layout_below="@id/edit_description"
+        android:layout_toEndOf="@id/edit_postalcode"
+        android:layout_marginStart="10dp"/>
+
+    <Button
+        android:id="@+id/edit_validation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_address"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:text="@string/edit_finish"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="@string/edit_edition"
+        android:textSize="50sp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

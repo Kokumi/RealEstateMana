@@ -25,5 +25,19 @@ It long just to have make the body of this screen properly.</string>
     <string name="real_estate_city_base">Nowhere</string>
     <string name="real_estate_price_base">Not Real</string>
 
+    <string name="edit_type">type</string>
+    <string name="edit_price">price</string>
+    <string name="edit_indollar">in dollar?</string>
+    <string name="edit_surface">surface</string>
+    <string name="edit_description">description</string>
+    <string name="edit_address">address</string>
+    <string name="edit_city">city</string>
+    <string name="edit_country">country</string>
+    <string name="edit_postal">Postal Code</string>
+    <string name="edit_apartement">apartement</string>
+    <string name="edit_finish">Finish</string>
+    <string name="edit_edition">Real Estate Edition</string>
+
+    <string name="title_activity_edit">where are you?</string>
 
 </resources>
