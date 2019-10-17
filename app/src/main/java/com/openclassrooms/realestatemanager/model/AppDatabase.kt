@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 /**
  * Created by Debruyckère Florian on 10/10/2019.
  */
-@Database(entities = arrayOf(RealEstate::class),version = 1)
+@Database(entities = [RealEstate::class],version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun realEstateDao(): RealEstateDao
 

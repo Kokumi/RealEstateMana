@@ -1,6 +1,11 @@
 package com.openclassrooms.realestatemanager.controller;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -29,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
         configureAdapter();
         configureFragment();
+        configureToolbar();
 
-        /*AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"database-name").build();
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"database-name").build();
         RealEstate estate = new RealEstate(1,"type",new Price(5000000,false),0,0,"des",
                 new Address("There","10a","Citycity","land"),new ArrayList<Interess>(),"not","0",
                 "0",new Agent(0,"nom","tele"),new ArrayList<String>());
@@ -39,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         db.realEstateDao().insertAll(estate);
         RealEstate test = db.realEstateDao().getAll().get(0);
 
-        System.out.println("saved: " + test.getDescription());*/
+        System.out.println("saved: " + test.getDescription());
     }
 
     /*private void configureTextViewMain(){
@@ -75,5 +81,25 @@ public class MainActivity extends AppCompatActivity {
         DetailFragment fragment = new DetailFragment();
         fT.add(R.id.main_detail_fragment,fragment);
         fT.commit();
+    }
+
+    private void configureToolbar(){
+        Toolbar toolbar = findViewById(R.id.tool_search);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.tool_search){
+            Toast.makeText(this, "SearchM enu", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

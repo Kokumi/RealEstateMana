@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Debruyckère Florian on 18/09/2019.
  */
-@Entity
+@Entity(tableName = "RealEstate")
 data class RealEstate(@PrimaryKey val id: Int,
                       @ColumnInfo(name="type") var type: String = "house",
                       @ColumnInfo(name="price") var price: Price = Price(0,false),

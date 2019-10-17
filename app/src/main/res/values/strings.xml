@@ -38,6 +38,8 @@ It long just to have make the body of this screen properly.</string>
     <string name="edit_finish">Finish</string>
     <string name="edit_edition">Real Estate Edition</string>
 
+    <string name="toolbar_search">search</string>
+
     <string name="title_activity_edit">where are you?</string>
 
 </resources>
