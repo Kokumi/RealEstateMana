@@ -38,7 +38,7 @@ class EditActivity(private var realEstateData : RealEstate? = null) : AppCompatA
 
         if(realEstateData != null){
             editType.setText(rED?.type)
-            editPrice.setText(rED?.price!!.value.toString())
+            /*editPrice.setText(rED?.price!!.value.toString())
             editAddress.setText(rED.address.address)
             editCity.setText(rED.address.city)
             editCountry.setText(rED.address.country)
@@ -46,7 +46,7 @@ class EditActivity(private var realEstateData : RealEstate? = null) : AppCompatA
             //editPostal.setText(rED.address.postal)
             editDescription.setText(rED.description)
             editSurface.setText(rED.surface.toString())
-            switchPriceType.isChecked = rED.price.isDollar
+            switchPriceType.isChecked = rED.price.isDollar*/
         }
 
         finishButton.setOnClickListener{

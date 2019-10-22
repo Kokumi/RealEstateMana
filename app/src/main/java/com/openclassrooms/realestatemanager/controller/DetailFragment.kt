@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.R
@@ -33,7 +34,6 @@ class DetailFragment : Fragment() {private var realEstateData : RealEstate? = nu
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
         // Inflate the layout for this fragment
-
         display(view)
         buttonConfig(view)
 
@@ -54,10 +54,10 @@ class DetailFragment : Fragment() {private var realEstateData : RealEstate? = nu
             warningLayout.visibility = View.GONE
             descriptionText.text = realEstateData!!.description
 
-            locationText.text = StringBuilder("${realEstateData!!.address.address}\n" +
+            /*locationText.text = StringBuilder("${realEstateData!!.address.address}\n" +
                     "${realEstateData!!.address.appartement}\n" +
                     "${realEstateData!!.address.city}\n$" +
-                    {realEstateData!!.address.country})
+                    {realEstateData!!.address.country})*/
 
             roomText.text = realEstateData!!.room.toString()
             surfaceText.text = realEstateData!!.surface.toString()
@@ -65,7 +65,7 @@ class DetailFragment : Fragment() {private var realEstateData : RealEstate? = nu
             val llm = LinearLayoutManager(activity?.applicationContext)
             llm.orientation = LinearLayoutManager.HORIZONTAL
             recyclerView.layoutManager =(llm)
-            recyclerView.adapter = FragmentMediaAdapter(realEstateData!!.imageList, activity!!.applicationContext)
+            //recyclerView.adapter = FragmentMediaAdapter(realEstateData!!.imageList, activity!!.applicationContext)
         }else{
             warningLayout.visibility = View.VISIBLE
         }

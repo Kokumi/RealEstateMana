@@ -47,8 +47,8 @@ class RealEstateAdapter(private val pData : ArrayList<RealEstate>,
 
         fun display(pRealEstate: RealEstate, pActivity: AppCompatActivity){
             typeView.text = pRealEstate.type
-            priceView.text = "${pRealEstate.price}"
-            cityView.text = pRealEstate.address.city
+            //priceView.text = "${pRealEstate.price}"
+            //cityView.text = pRealEstate.address.city
 
             cellView.setOnClickListener {
 

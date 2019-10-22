@@ -1,8 +1,12 @@
 package com.openclassrooms.realestatemanager.controller;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -14,17 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.model.Address;
-import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.AppDatabase;
+import com.openclassrooms.realestatemanager.model.AppDatabase_Impl;
 import com.openclassrooms.realestatemanager.model.Interess;
-import com.openclassrooms.realestatemanager.model.Price;
 import com.openclassrooms.realestatemanager.model.RealEstate;
 import com.openclassrooms.realestatemanager.model.RealEstateAdapter;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<RealEstate> mRealEstates = new ArrayList<>();
 
 
     @Override
@@ -34,18 +38,40 @@ public class MainActivity extends AppCompatActivity {
 
         configureAdapter();
         configureFragment();
-        configureToolbar();
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"database-name").build();
-        RealEstate estate = new RealEstate(1,"type",new Price(5000000,false),0,0,"des",
-                new Address("There","10a","Citycity","land"),new ArrayList<Interess>(),"not","0",
-                "0",new Agent(0,"nom","tele"),new ArrayList<String>());
-        //AppDatabase db =
+        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"database-name").build();
+        //final AppDatabase db = new AppDatabase_Impl();
+        final AppDatabase db = Room.inMemoryDatabaseBuilder(getApplicationContext(),AppDatabase.class).build();
 
-        db.realEstateDao().insertAll(estate);
-        RealEstate test = db.realEstateDao().getAll().get(0);
 
-        System.out.println("saved: " + test.getDescription());
+
+        final RealEstate estate = new RealEstate(1,"type",0,0,"Description",
+               /* new ArrayList<Interess>(),*/"des","never","not",/*new ArrayList<String>(),*/
+                0,0,0);
+        mRealEstates.add(estate);
+
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                db.realEstateDao().insertAll(estate);
+                return null;
+            }
+        };
+
+        task.execute();
+
+        //db.realEstateDao().insertAll(estate);
+        AsyncTask task2 = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                RealEstate test = db.realEstateDao().getAll().get(0);
+                System.out.println("saved: " + test.getDescription());
+                return null;
+            }
+        };
+        task2.execute();
+
+
     }
 
     /*private void configureTextViewMain(){
@@ -62,15 +88,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureAdapter(){
         ArrayList<Interess> inte = new ArrayList<>();
-        RealEstate estate = new RealEstate(1,"type",new Price(5000000,false),0,0,"des",
-                new Address("There","10a","Citycity","land"),inte,"not","0",
-                "0",new Agent(0,"nom","tele"),new ArrayList<String>());
+        RealEstate estate = new RealEstate(1,"type",0,0,"Description",
+               /*inte,*/"des","never","not",/*new ArrayList<String>(),*/
+                0,0,0);
+        /*new Price(5000000,false)
+        new Address("There","10a","Citycity","land")
+        new Agent(0,"nom","tele")*/
 
         ArrayList<RealEstate> data = new ArrayList<>();
         //RealEstate[] dataB = {estate};
-
         data.add(estate);
-        RealEstateAdapter adapter = new RealEstateAdapter(data,this);
+
+        RealEstateAdapter adapter = new RealEstateAdapter(mRealEstates,this);
         RecyclerView recyclerView = findViewById(R.id.main_List);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -83,21 +112,32 @@ public class MainActivity extends AppCompatActivity {
         fT.commit();
     }
 
-    private void configureToolbar(){
-        Toolbar toolbar = findViewById(R.id.tool_search);
-        setSupportActionBar(toolbar);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar,menu);
+
+        /*MenuItem searchItem = menu.findItem(R.id.tool_search);
+        SearchManager searchManager = (SearchManager) MainActivity.this.getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = null;
+        if(searchItem != null){
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if(searchView != null){
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(MainActivity.this.getComponentName()));
+        }*/
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.tool_search){
-            Toast.makeText(this, "SearchM enu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Search Menu", Toast.LENGTH_SHORT).show();
+            ArrayList<RealEstate> result = new ArrayList<>();
+
+            for(RealEstate current : mRealEstates){
+
+            }
         }
 
         return super.onOptionsItemSelected(item);
