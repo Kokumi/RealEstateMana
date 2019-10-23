@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.controller.DetailFragment
+import java.lang.StringBuilder
 
 /**
  * Created by Debruyckère Florian on 20/09/2019.
@@ -43,17 +44,61 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
         private val priceView : TextView = cellView.findViewById(R.id.cell_price)
         private val cityView : TextView = cellView.findViewById(R.id.cell_city)
 
+        private var mPrice :Price? = null
+        private var mAddress : Address? = null
+
         fun display(pRealEstate: RealEstate, pActivity: AppCompatActivity){
             typeView.text = pRealEstate.type
-            //priceView.text = "${pRealEstate.price}"
-            //cityView.text = pRealEstate.address.city
+
+            val database = Room.databaseBuilder(pActivity, AppDatabase::class.java, "database").build()
+            val price = PriceTask(this,database)
+            price.execute(pRealEstate.priceId)
+            val address = AddressTask(this, database)
+            address.execute(pRealEstate.addressId)
 
             cellView.setOnClickListener {
 
-                val dF = DetailFragment.newInstance(pRealEstate)
+                val dF = DetailFragment.newInstance(pRealEstate, mPrice!!, mAddress!!)
                 pActivity.supportFragmentManager.beginTransaction().replace(R.id.main_detail_fragment, dF).commit()
             }
         }
+
+        fun priceDisplay(pPrice : Price?){
+            priceView.text = if(pPrice != null) StringBuilder( pPrice.value.toString() + " "
+            + if(pPrice.isDollar) "$" else "€") else "not Found"
+            mPrice = pPrice
+        }
+
+        fun addressDisplay(pAddress: Address){
+            cityView.text = pAddress.city
+            mAddress = pAddress
+        }
     }
 
+    class PriceTask(private val pHolder : ViewHolder, private val pDatabase : AppDatabase) : AsyncTask<Int,Void,Price>(){
+
+
+        override fun onPostExecute(result: Price?) {
+            pHolder.priceDisplay(result)
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: Int?): Price? {
+
+            return if(p0.get(0)!= null) pDatabase.realEstateDao().getPriceById(p0.get(0) as Int)
+                else null
+        }
+    }
+
+    class AddressTask(private val pHolder: ViewHolder, private val pDatabase: AppDatabase) : AsyncTask<Int,Void,Address>(){
+        override fun onPostExecute(result: Address) {
+            pHolder.addressDisplay(result)
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: Int?): Address {
+            return if(p0.get(0) != null) pDatabase.realEstateDao().getAddressById(p0.get(0) as Int)
+                else Address(0,"","","NotFound","")
+        }
+    }
 }

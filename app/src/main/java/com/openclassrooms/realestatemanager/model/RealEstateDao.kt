@@ -15,6 +15,12 @@ interface RealEstateDao {
     @Query("SELECT * FROM realestate WHERE id IN (:pId)")
     fun loadAllById(pId : IntArray) : List<RealEstate>
 
+    @Query("SELECT * FROM Price WHERE id == (:pId)")
+    fun getPriceById(pId: Int) : Price
+
+    @Query("SELECT * FROM Address WHERE id == (:pId)")
+    fun getAddressById(pId: Int) : Address
+
     @Insert
     fun insertAll(vararg realEstates : RealEstate)
 

@@ -14,21 +14,30 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.model.Address
 import com.openclassrooms.realestatemanager.model.FragmentMediaAdapter
+import com.openclassrooms.realestatemanager.model.Price
 import com.openclassrooms.realestatemanager.model.RealEstate
 import java.lang.StringBuilder
 
 /**
  * Fragment to show Detail of a RealEstate
  */
-class DetailFragment : Fragment() {private var realEstateData : RealEstate? = null
+class DetailFragment : Fragment() {
+
+    private var realEstateData : RealEstate? = null
+    private var priceDate : Price? = null
+    private var addressData : Address? = null
+
     companion object{
-        fun newInstance(pRealEstate: RealEstate?) = DetailFragment().apply{
+        fun newInstance(pRealEstate: RealEstate?, pPrice: Price, pAddress: Address) = DetailFragment().apply{
             realEstateData = pRealEstate
+            priceDate = pPrice
+            addressData = pAddress
         }
     }
 
-    private val extraRealEstate = "RealEstate"
+    //private val extraRealEstate = "RealEstate"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,10 +63,10 @@ class DetailFragment : Fragment() {private var realEstateData : RealEstate? = nu
             warningLayout.visibility = View.GONE
             descriptionText.text = realEstateData!!.description
 
-            /*locationText.text = StringBuilder("${realEstateData!!.address.address}\n" +
-                    "${realEstateData!!.address.appartement}\n" +
-                    "${realEstateData!!.address.city}\n$" +
-                    {realEstateData!!.address.country})*/
+            locationText.text = StringBuilder("${addressData!!.address}\n" +
+                    "${addressData!!.apartment}\n" +
+                    "${addressData!!.city}\n$" +
+                    {addressData!!.country})
 
             roomText.text = realEstateData!!.room.toString()
             surfaceText.text = realEstateData!!.surface.toString()
