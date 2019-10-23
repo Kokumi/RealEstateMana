@@ -1,18 +1,16 @@
 package com.openclassrooms.realestatemanager.model
 
 //import android.support.v7.widget.RecyclerView
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.controller.DetailFragment
 
@@ -20,7 +18,7 @@ import com.openclassrooms.realestatemanager.controller.DetailFragment
  * Created by Debruyckère Florian on 20/09/2019.
  */
 
-class RealEstateAdapter(private val pData : ArrayList<RealEstate>,
+class RealEstateAdapter(private val pData : List<RealEstate>,
                         private val pActivity: AppCompatActivity)
     :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
 
@@ -57,4 +55,5 @@ class RealEstateAdapter(private val pData : ArrayList<RealEstate>,
             }
         }
     }
+
 }

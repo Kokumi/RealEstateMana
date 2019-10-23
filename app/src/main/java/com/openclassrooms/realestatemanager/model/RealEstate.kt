@@ -5,17 +5,22 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import kotlin.collections.ArrayList
 
 /**
  * Created by Debruyckère Florian on 18/09/2019.
  */
-@Entity(tableName = "RealEstate"/*,
-        foreignKeys = arrayOf(ForeignKey(
-                entity = Address::class,
-                parentColumns = arrayOf("id"),
-                childColumns = arrayOf("addressId"))
-        )*/)
+@Entity(tableName = "RealEstate",
+        foreignKeys = arrayOf(
+                ForeignKey(
+                        entity = Address::class,
+                        parentColumns = arrayOf("id"),
+                        childColumns = arrayOf("addressId")),
+                ForeignKey(
+                        entity = Price::class,
+                        parentColumns = arrayOf("id"),
+                        childColumns = arrayOf("priceId")
+                )
+        ))
 data class RealEstate(@PrimaryKey val id: Int,
                       @ColumnInfo(name="type") var type: String = "house",
                       @ColumnInfo(name="surface") var surface: Int = 0,

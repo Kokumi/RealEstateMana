@@ -18,4 +18,10 @@ interface RealEstateDao {
     @Insert
     fun insertAll(vararg realEstates : RealEstate)
 
+    @Insert
+    fun insertPrice(vararg pPrice: Price)
+
+    @Insert
+    fun insertAddress(vararg pAddress: Address)
+
 }
