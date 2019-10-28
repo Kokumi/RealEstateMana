@@ -117,11 +117,10 @@ class EditActivity : AppCompatActivity() {
         override fun doInBackground(vararg p0: Void?): Boolean {
             val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
             try{
-                println("priceId "+ pAddress.id)
-                println("in estate "+ pRealEstate.addressId)
-                db.realEstateDao().insertAddress(pAddress)
+                /*db.realEstateDao().insertAddress(pAddress)
                 db.realEstateDao().insertPrice(pPrice)
-                db.realEstateDao().insertAll(pRealEstate)
+                db.realEstateDao().insertAll(pRealEstate)*/
+                db.realEstateDao().insertNewRealEstate(pRealEstate,pPrice,pAddress)
 
                 return true
             }

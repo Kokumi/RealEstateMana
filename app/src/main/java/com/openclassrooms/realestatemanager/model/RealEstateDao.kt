@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.model
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 
 /**
  * Created by Debruyckère Florian on 10/10/2019.
@@ -22,12 +23,21 @@ interface RealEstateDao {
     fun getAddressById(pId: Int) : Address
 
     @Insert
-    fun insertAll(vararg realEstates : RealEstate)
+    fun insertEstate(realEstates : RealEstate)
 
     @Insert
-    fun insertPrice(vararg pPrice: Price)
+    fun insertPrice(pPrice: Price): Long
 
     @Insert
-    fun insertAddress(vararg pAddress: Address)
+    fun insertAddress(pAddress: Address): Long
+
+    @Transaction
+    fun insertNewRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address){
+        val priceId = insertPrice(pPrice)
+        val addressId = insertAddress(pAddress)
+        pRealEstate.priceId = priceId.toInt()
+        pRealEstate.addressId = addressId.toInt()
+        insertEstate(pRealEstate)
+    }
 
 }
