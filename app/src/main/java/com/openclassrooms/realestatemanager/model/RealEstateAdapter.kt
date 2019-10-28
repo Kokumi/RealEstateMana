@@ -22,18 +22,30 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
                         private val pActivity: AppCompatActivity)
     :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
 
-
+    private var mData : List<RealEstate> = pData
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.real_estate_cell, parent, false) as View
 
+        //mData = pData
+
         return ViewHolder(view)
     }
 
-    override fun getItemCount() = pData.size
+    fun getFilter(filter : String){
+        val array : ArrayList<RealEstate> = ArrayList()
+        for(realEstate in pData){
+            if(realEstate.type.contains(filter)){
+                array.add(element = realEstate)
+            }
+        }
+        mData = array
+    }
+
+    override fun getItemCount() = mData.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.display(pData[position],pActivity)
+        holder.display(mData[position],pActivity)
     }
 
     class ViewHolder(private val cellView: View) : RecyclerView.ViewHolder(cellView){

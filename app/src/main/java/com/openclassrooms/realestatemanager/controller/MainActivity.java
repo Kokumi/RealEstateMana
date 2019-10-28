@@ -27,6 +27,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    RealEstateAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureAdapter(List<RealEstate> pData){
 
-        RealEstateAdapter adapter = new RealEstateAdapter(pData,this);
+        mAdapter = new RealEstateAdapter(pData,this);
         RecyclerView recyclerView = findViewById(R.id.main_List);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(mAdapter);
     }
 
     private void configureFragment(){
@@ -74,15 +75,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar,menu);
 
-        /*MenuItem searchItem = menu.findItem(R.id.tool_search);
-        SearchManager searchManager = (SearchManager) MainActivity.this.getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = null;
-        if(searchItem != null){
-            searchView = (SearchView) searchItem.getActionView();
-        }
-        if(searchView != null){
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(MainActivity.this.getComponentName()));
-        }*/
+        MenuItem search = menu.findItem(R.id.tool_search);
+        SearchView searchView = (SearchView)search.getActionView();
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mAdapter.getFilter(s);
+                return false;
+            }
+        });
 
         return true;
     }
