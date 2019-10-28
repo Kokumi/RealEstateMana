@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.model
 
 //import android.support.v7.widget.RecyclerView
-import android.content.Context
 import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
@@ -81,6 +80,7 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
         override fun onPostExecute(result: Price?) {
             pHolder.priceDisplay(result)
             super.onPostExecute(result)
+            this.cancel(true)
         }
 
         override fun doInBackground(vararg p0: Int?): Price? {
@@ -94,6 +94,7 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
         override fun onPostExecute(result: Address) {
             pHolder.addressDisplay(result)
             super.onPostExecute(result)
+            this.cancel(true)
         }
 
         override fun doInBackground(vararg p0: Int?): Address {

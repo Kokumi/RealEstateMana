@@ -21,7 +21,7 @@ import java.io.Serializable
                         childColumns = arrayOf("priceId")
                 )
         ))
-data class RealEstate(@PrimaryKey val id: Int,
+data class RealEstate(@PrimaryKey(autoGenerate = true) val id: Int = 0,
                       @ColumnInfo(name="type") var type: String = "house",
                       @ColumnInfo(name="surface") var surface: Int = 0,
                       @ColumnInfo(name="room") var room: Int = 0,

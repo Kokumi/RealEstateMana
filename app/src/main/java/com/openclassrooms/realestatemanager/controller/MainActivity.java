@@ -38,21 +38,7 @@ public class MainActivity extends AppCompatActivity {
         configureFragment();
 
 
-        /*AsyncTask task2 = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                RealEstate estate = new RealEstate(1,"type",0,0,"Description",
-                "des","never","not",
-                0,0,0);
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class, "database").build();
-               // db.realEstateDao().insertPrice(new Price(0,50000,false));
-                // db.realEstateDao().insertAddress(new Address(0,"17 rue due","","Mouvaux","France"));
-                db.realEstateDao().insertAll(estate);
-                return null;
-            }
-        };
 
-        task2.execute();*/
 
 
     }

@@ -87,6 +87,8 @@ class DetailFragment : Fragment() {
         editButton.setOnClickListener{
             val intent = Intent(context,EditActivity::class.java)
             intent.putExtra("SELECTION",realEstateData)
+            intent.putExtra("SELECTION_PRICE",priceDate)
+            intent.putExtra("SELECTION_ADDRESSS",addressData)
             startActivity(intent)
         }
     }

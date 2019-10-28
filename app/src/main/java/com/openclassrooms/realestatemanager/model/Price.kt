@@ -9,6 +9,6 @@ import java.io.Serializable
  * Created by Debruyckère Florian on 27/09/2019.
  */
 @Entity(tableName = "Price")
-class Price(@PrimaryKey val id : Int,
-            @ColumnInfo(name = "value") val value: Int,
-            @ColumnInfo(name = "isDollar") val isDollar: Boolean) : Serializable
+class Price(@PrimaryKey(autoGenerate = true) val id : Int = 0,
+            @ColumnInfo(name = "value") var value: Int,
+            @ColumnInfo(name = "isDollar") var isDollar: Boolean) : Serializable
