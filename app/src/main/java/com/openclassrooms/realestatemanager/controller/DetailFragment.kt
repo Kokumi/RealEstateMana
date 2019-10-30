@@ -66,8 +66,8 @@ class DetailFragment : Fragment() {
 
             locationText.text = StringBuilder("${addressData!!.address}\n" +
                     "${addressData!!.apartment}\n" +
-                    "${addressData!!.city}\n$" +
-                    {addressData!!.country})
+                    "${addressData!!.city}\n" +
+                    addressData!!.country)
 
             roomText.text = realEstateData!!.room.toString()
             surfaceText.text = realEstateData!!.surface.toString()
