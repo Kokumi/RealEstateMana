@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controller
 
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -75,9 +76,11 @@ class DetailFragment : Fragment() {
             llm.orientation = LinearLayoutManager.HORIZONTAL
             recyclerView.layoutManager =(llm)
             //recyclerView.adapter = FragmentMediaAdapter(realEstateData!!.imageList, activity!!.applicationContext)
+
         }else{
             warningLayout.visibility = View.VISIBLE
         }
+
 
     }
 
@@ -88,7 +91,7 @@ class DetailFragment : Fragment() {
             val intent = Intent(context,EditActivity::class.java)
             intent.putExtra("SELECTION",realEstateData)
             intent.putExtra("SELECTION_PRICE",priceDate)
-            intent.putExtra("SELECTION_ADDRESSS",addressData)
+            intent.putExtra("SELECTION_ADDRESS",addressData)
             startActivity(intent)
         }
     }

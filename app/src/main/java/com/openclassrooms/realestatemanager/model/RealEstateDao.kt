@@ -1,9 +1,6 @@
 package com.openclassrooms.realestatemanager.model
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 
 /**
  * Created by Debruyckère Florian on 10/10/2019.
@@ -38,6 +35,24 @@ interface RealEstateDao {
         pRealEstate.priceId = priceId.toInt()
         pRealEstate.addressId = addressId.toInt()
         insertEstate(pRealEstate)
+    }
+
+    @Update
+    fun updatePrice(pPrice: Price):Int
+
+    @Update
+    fun updateAddress(pAddress: Address):Int
+
+    @Update
+    fun updateEstate(pRealEstate: RealEstate)
+
+    @Transaction
+    fun updateRealEstate(pRealEstate: RealEstate,pPrice: Price,pAddress: Address){
+        val priceId = updatePrice(pPrice)
+        val addressId = updateAddress(pAddress)
+        pRealEstate.addressId=addressId
+        pRealEstate.priceId=priceId
+        updateEstate(pRealEstate)
     }
 
 }

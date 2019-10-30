@@ -21,6 +21,7 @@ class EditActivity : AppCompatActivity() {
     private var realEstateData : RealEstate? = null
     private var priceData : Price? = null
     private var addressData : Address? = null
+    private var mExisting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +34,16 @@ class EditActivity : AppCompatActivity() {
         addressData = if(intent.extras?.get("SELECTION_ADDRESS") != null) intent.extras?.get("SELECTION_ADDRESS") as Address
         else null
 
+        if(realEstateData!= null && priceData!=null && addressData!=null) mExisting = true
+
+
         display()
     }
 
     private fun display(){
         val rED = realEstateData
+        val pD = priceData
+        val aD = addressData
 
         val editType = findViewById<EditText>(R.id.edit_type)
         val editPrice = findViewById<EditText>(R.id.edit_price)
@@ -53,15 +59,15 @@ class EditActivity : AppCompatActivity() {
 
         if(realEstateData != null){
             editType.setText(rED?.type)
-            editPrice.setText(priceData!!.value.toString())
-            editAddress.setText(addressData!!.address)
-            editCity.setText(addressData!!.city)
-            editCountry.setText(addressData!!.country)
-            editApartement.setText(addressData!!.apartment)
+            editPrice.setText(pD!!.value.toString())
+            editAddress.setText(aD!!.address)
+            editCity.setText(aD.city)
+            editCountry.setText(aD.country)
+            editApartement.setText(aD.apartment)
             //editPostal.setText(addressData!!.postal)
             editDescription.setText(rED!!.description)
             editSurface.setText(rED.surface.toString())
-            switchPriceType.isChecked = priceData!!.isDollar
+            switchPriceType.isChecked = pD.isDollar
         }
 
         finishButton.setOnClickListener{
@@ -93,16 +99,14 @@ class EditActivity : AppCompatActivity() {
             }
 
 
-
-            val saveTask = SaveEditTask(priceData as Price,realEstateData as RealEstate, addressData as Address, this)
+            val saveTask = SaveEditTask(priceData as Price,realEstateData as RealEstate, addressData as Address,
+                    this, mExisting)
             saveTask.execute()
-
-            //val intent = Intent(this, MainActivity::class.java)
-            //startActivity(intent)
         }
     }
 
-    class SaveEditTask(private val pPrice: Price,private val pRealEstate: RealEstate,private val pAddress: Address, private val pContext: Context)
+    class SaveEditTask(private val pPrice: Price,private val pRealEstate: RealEstate,private val pAddress: Address,
+                       private val pContext: Context, private val pExisting : Boolean)
         : AsyncTask<Void,Void,Boolean>(){
         override fun onPostExecute(result: Boolean) {
             if(result){
@@ -117,11 +121,10 @@ class EditActivity : AppCompatActivity() {
         override fun doInBackground(vararg p0: Void?): Boolean {
             val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
             try{
-                /*db.realEstateDao().insertAddress(pAddress)
-                db.realEstateDao().insertPrice(pPrice)
-                db.realEstateDao().insertAll(pRealEstate)*/
-                db.realEstateDao().insertNewRealEstate(pRealEstate,pPrice,pAddress)
-
+                if(pExisting)
+                    db.realEstateDao().updateRealEstate(pRealEstate,pPrice,pAddress)
+                else
+                    db.realEstateDao().insertNewRealEstate(pRealEstate,pPrice,pAddress)
                 return true
             }
             catch (e : Exception){
