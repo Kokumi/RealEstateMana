@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.model
 
-//import android.support.v7.widget.RecyclerView
 import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
@@ -13,33 +12,25 @@ import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.controller.DetailFragment
 import java.lang.StringBuilder
+import kotlin.collections.ArrayList
 
 /**
  * Created by Debruyckère Florian on 20/09/2019.
  */
 
-class RealEstateAdapter(private val pData : List<RealEstate>,
+class RealEstateAdapter(pData : List<RealEstate>,
                         private val pActivity: AppCompatActivity)
     :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
 
+
     private var mData : List<RealEstate> = pData
+    private var mPriceData : ArrayList<Price> = ArrayList()
+    private var mAddressData = ArrayList<Address>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.real_estate_cell, parent, false) as View
 
-        //mData = pData
-
-        return ViewHolder(view)
-    }
-
-    fun getFilter(filter : String){
-        val array : ArrayList<RealEstate> = ArrayList()
-        for(realEstate in pData){
-            if(realEstate.type.contains(filter)){
-                array.add(element = realEstate)
-            }
-        }
-        mData = array
+        return ViewHolder(view,this)
     }
 
     override fun getItemCount() = mData.size
@@ -48,7 +39,8 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
         holder.display(mData[position],pActivity)
     }
 
-    class ViewHolder(private val cellView: View) : RecyclerView.ViewHolder(cellView){
+    class ViewHolder(private val cellView: View,private val pParent : RealEstateAdapter) : RecyclerView.ViewHolder(cellView),
+        AsyncResponse{
 
         private val imageView : ImageView = cellView.findViewById(R.id.cell_image)
         private val typeView : TextView = cellView.findViewById(R.id.cell_type)
@@ -58,14 +50,24 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
         private var mPrice :Price? = null
         private var mAddress : Address? = null
 
+        override fun processFinish(priceOutput: Price?, addressOutput : Address?) {
+            if(priceOutput != null){ priceDisplay(priceOutput) ; pParent.mPriceData.add(priceOutput)}
+
+            if(addressOutput != null) {addressDisplay(addressOutput) ; pParent.mAddressData.add(addressOutput)}
+        }
+
         fun display(pRealEstate: RealEstate, pActivity: AppCompatActivity){
             typeView.text = pRealEstate.type
 
             val database = Room.databaseBuilder(pActivity, AppDatabase::class.java, "database").build()
-            val price = PriceTask(this,database)
+            val price = PriceTask(database)
+            price.delegate = this
             price.execute(pRealEstate.priceId)
-            val address = AddressTask(this, database)
+
+            val address = AddressTask(database)
+            address.delegate = this
             address.execute(pRealEstate.addressId)
+
 
             cellView.setOnClickListener {
 
@@ -74,23 +76,24 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
             }
         }
 
-        fun priceDisplay(pPrice : Price?){
+        private fun priceDisplay(pPrice : Price?){
             priceView.text = if(pPrice != null) StringBuilder( pPrice.value.toString() + " "
             + if(pPrice.isDollar) "$" else "€") else "not Found"
             mPrice = pPrice
         }
 
-        fun addressDisplay(pAddress: Address){
+        private fun addressDisplay(pAddress: Address){
             cityView.text = pAddress.city
             mAddress = pAddress
         }
     }
 
-    class PriceTask(private val pHolder : ViewHolder, private val pDatabase : AppDatabase) : AsyncTask<Int,Void,Price>(){
-
+    class PriceTask( private val pDatabase : AppDatabase) : AsyncTask<Int,Void,Price>(){
+        var delegate : AsyncResponse? = null
 
         override fun onPostExecute(result: Price?) {
-            pHolder.priceDisplay(result)
+            delegate!!.processFinish(priceOutput = result)
+            //pHolder.priceDisplay(result)
             super.onPostExecute(result)
             this.cancel(true)
         }
@@ -102,9 +105,12 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
         }
     }
 
-    class AddressTask(private val pHolder: ViewHolder, private val pDatabase: AppDatabase) : AsyncTask<Int,Void,Address>(){
+    class AddressTask( private val pDatabase: AppDatabase) : AsyncTask<Int,Void,Address>(){
+        var delegate : AsyncResponse? = null
+
         override fun onPostExecute(result: Address) {
-            pHolder.addressDisplay(result)
+            delegate!!.processFinish(addressOutput = result)
+            //pHolder.addressDisplay(result)
             super.onPostExecute(result)
             this.cancel(true)
         }
@@ -114,4 +120,7 @@ class RealEstateAdapter(private val pData : List<RealEstate>,
                 else Address(0,"","","NotFound","")
         }
     }
+
+}interface AsyncResponse{
+    fun processFinish(priceOutput: Price? = null, addressOutput : Address? = null)
 }
