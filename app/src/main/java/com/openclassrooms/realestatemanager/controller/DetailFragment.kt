@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.controller
 
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,12 +10,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.Address
-import com.openclassrooms.realestatemanager.model.FragmentMediaAdapter
 import com.openclassrooms.realestatemanager.model.Price
 import com.openclassrooms.realestatemanager.model.RealEstate
 import java.lang.StringBuilder
@@ -27,13 +24,13 @@ import java.lang.StringBuilder
 class DetailFragment : Fragment() {
 
     private var realEstateData : RealEstate? = null
-    private var priceDate : Price? = null
+    private var priceData : Price? = null
     private var addressData : Address? = null
 
     companion object{
         fun newInstance(pRealEstate: RealEstate?, pPrice: Price, pAddress: Address) = DetailFragment().apply{
             realEstateData = pRealEstate
-            priceDate = pPrice
+            priceData = pPrice
             addressData = pAddress
         }
     }
@@ -58,6 +55,11 @@ class DetailFragment : Fragment() {
         val locationText = pView.findViewById(R.id.fragment_location_text) as TextView
         val roomText = pView.findViewById(R.id.fragment_room_text) as TextView
         val surfaceText = pView.findViewById(R.id.fragment_surface_text) as TextView
+        val priceText = pView.findViewById(R.id.fragment_price_text) as TextView
+        val statusText = pView.findViewById(R.id.fragment_status_text) as TextView
+        val dateEntreeText = pView.findViewById(R.id.fragment_date_entree_text)as TextView
+        val dateVenteText = pView.findViewById(R.id.fragment_date_vente_text) as TextView
+        //val agentText = pView.findViewById(R.id.fragment_agent_text) as TextView
         val recyclerView = pView.findViewById(R.id.fragment_media) as RecyclerView
 
         if(realEstateData != null){
@@ -71,6 +73,11 @@ class DetailFragment : Fragment() {
 
             roomText.text = realEstateData!!.room.toString()
             surfaceText.text = realEstateData!!.surface.toString()
+            statusText.text = realEstateData!!.statut
+            priceText.text = if(priceData!!.isDollar) priceData!!.value.toString() + "$" else priceData!!.value.toString() + "€"
+
+            dateEntreeText.text = realEstateData!!.dateEntree
+            dateVenteText.text = realEstateData!!.dateVente
 
             val llm = LinearLayoutManager(activity?.applicationContext)
             llm.orientation = LinearLayoutManager.HORIZONTAL
@@ -86,12 +93,17 @@ class DetailFragment : Fragment() {
 
     private fun buttonConfig(pView: View){
         val editButton = pView.findViewById(R.id.fragment_edit_button) as Button
+        val createButton = pView.findViewById(R.id.fragment_edit_new) as Button
 
         editButton.setOnClickListener{
             val intent = Intent(context,EditActivity::class.java)
             intent.putExtra("SELECTION",realEstateData)
-            intent.putExtra("SELECTION_PRICE",priceDate)
+            intent.putExtra("SELECTION_PRICE",priceData)
             intent.putExtra("SELECTION_ADDRESS",addressData)
+            startActivity(intent)
+        }
+        createButton.setOnClickListener{
+            val intent = Intent(context, EditActivity::class.java)
             startActivity(intent)
         }
     }

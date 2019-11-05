@@ -5,10 +5,8 @@ import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Switch
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.Address
@@ -16,6 +14,9 @@ import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Price
 import com.openclassrooms.realestatemanager.model.RealEstate
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 class EditActivity : AppCompatActivity() {
     private var realEstateData : RealEstate? = null
@@ -55,7 +56,10 @@ class EditActivity : AppCompatActivity() {
         val editPostal = findViewById<EditText>(R.id.edit_postalcode)
         val editDescription = findViewById<EditText>(R.id.edit_description)
         val editSurface = findViewById<EditText>(R.id.edit_surface)
+        val editStatus = findViewById<Spinner>(R.id.edit_status)
         val finishButton = findViewById<Button>(R.id.edit_validation)
+
+        spinnerConfiguration(editStatus)
 
         if(realEstateData != null){
             editType.setText(rED?.type)
@@ -71,6 +75,8 @@ class EditActivity : AppCompatActivity() {
         }
 
         finishButton.setOnClickListener{
+
+            val todayday = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(Date())
             if(priceData == null && realEstateData == null && addressData == null){
                 priceData = Price(value= if(editPrice.text != null) Integer.parseInt( editPrice.text.toString()) else 0,
                         isDollar = switchPriceType.isChecked)
@@ -80,11 +86,15 @@ class EditActivity : AppCompatActivity() {
                         city = if(editCity.text != null) editCity.text.toString() else "" ,
                         country = if(editCountry.text != null) editCountry.text.toString() else "")
 
+
                 realEstateData = RealEstate(type = if(editType.text != null) editType.text.toString() else "",
                         description = if(editDescription.text != null) editDescription.text.toString() else "",
                         surface = if(editSurface.text != null) Integer.parseInt(editSurface.text.toString()) else 0,
+                        statut = editStatus.selectedItem.toString(),
                         addressId = addressData!!.id,
-                        priceId = priceData!!.id
+                        priceId = priceData!!.id,
+                        dateEntree = todayday,
+                        dateVente = if(editStatus.selectedItemPosition == 2) todayday else "not sold"
                         )
             }else{
                 priceData!!.value = if(editPrice.text != null) Integer.parseInt( editPrice.text.toString()) else 0
@@ -96,12 +106,36 @@ class EditActivity : AppCompatActivity() {
                 realEstateData!!.type = if(editType.text != null) editType.text.toString() else ""
                 realEstateData!!.description = if(editDescription.text != null) editDescription.text.toString() else ""
                 realEstateData!!.surface = if(editSurface.text != null) Integer.parseInt(editSurface.text.toString()) else 0
+                realEstateData!!.statut = editStatus.selectedItem.toString()
+                realEstateData!!.dateVente = if(editStatus.selectedItemPosition == 2)todayday else "not sold"
             }
 
-
+            println(realEstateData!!.statut)
             val saveTask = SaveEditTask(priceData as Price,realEstateData as RealEstate, addressData as Address,
                     this, mExisting)
             saveTask.execute()
+        }
+
+
+
+    }
+    private fun spinnerConfiguration(pSpinner: Spinner){
+        val typeItem = arrayOf("Not Ready", "On sale", "Sold")
+        val dropAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, typeItem)
+        pSpinner.adapter =dropAdapter
+
+        if(realEstateData != null) {
+            when (realEstateData!!.statut) {
+                "Not Ready" -> pSpinner.setSelection(0)
+
+                "On sale" -> pSpinner.setSelection(1)
+
+                "Sold" -> pSpinner.setSelection(2)
+
+                else -> pSpinner.setSelection(0)
+            }
+        } else{
+            pSpinner.setSelection(0)
         }
     }
 

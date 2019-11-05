@@ -10,13 +10,23 @@ It long just to have make the body of this screen properly.</string>
     <string name="fragment_surface_base">0m</string>
     <string name="fragment_room_title">number of room</string>
     <string name="fragment_room_base">0</string>
-    <string name="fragment_bathroom">number of bathroom</string>
-    <string name="fragment_bedroom">number of bedroom</string>
+    <string name="fragment_agent">agent name</string>
+    <string name="fragment_agent_base">unknown</string>
+    <string name="fragment_status">actual status</string>
+    <string name="fragment_statut_base">unknown</string>
     <string name="fragment_location_title">location</string>
     <string name="fragment_location_base">1 something
         \n apt 6A
         \n somewhere
         \n NL 00000 \n nowhereland</string>
+    <string name="fragment_price">Price</string>
+    <string name="fragment_price_base">0$</string>
+    <string name="fragment_date_entree_title">Date Creation</string>
+    <string name="fragment_date_entree_base">unknown</string>
+    <string name="fragment_date_vente_title">Sold Date</string>
+    <string name="fragment_date_vente_base">unknown</string>
+    <string name="fragment_button_edit">Edit</string>
+    <string name="fragment_button_new">Create</string>
 
     <string name="media_description">Image of the selected realEstate</string>
 
