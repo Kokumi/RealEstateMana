@@ -23,10 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.model.Address;
+import com.openclassrooms.realestatemanager.model.Entity.Address;
 import com.openclassrooms.realestatemanager.model.AppDatabase;
-import com.openclassrooms.realestatemanager.model.Price;
-import com.openclassrooms.realestatemanager.model.RealEstate;
+import com.openclassrooms.realestatemanager.model.Entity.Price;
+import com.openclassrooms.realestatemanager.model.Entity.RealEstate;
 import com.openclassrooms.realestatemanager.model.RealEstateAdapter;
 
 import java.util.ArrayList;

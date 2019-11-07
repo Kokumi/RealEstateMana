@@ -1,9 +1,7 @@
-package com.openclassrooms.realestatemanager.model
+package com.openclassrooms.realestatemanager.model.Entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import android.graphics.Bitmap
+import androidx.room.*
 import java.io.Serializable
 
 /**
@@ -30,10 +28,7 @@ data class RealEstate(@PrimaryKey(autoGenerate = true) val id: Int = 0,
                       @ColumnInfo(name="statut") var statut: String = "unknown",
                       @ColumnInfo(name="dateEntree") var dateEntree: String = "unknown",
                       @ColumnInfo(name="dateVente") var dateVente: String = "unknown",
-                       //val imageList: ArrayList<String>,
                       @ColumnInfo(name="addressId") var addressId : Int =0,
                       @ColumnInfo(name="agentId") var agentId : Int = 0,
-                      @ColumnInfo(name="priceId") var priceId : Int = 0) : Serializable
-//var price: Price = Price(0,false)
-//var address: Address = Address("nowhere",city = "somewhere", country = "elsewere"),
-//var agent: Agent = Agent(0,"No one","no"),
+                      @ColumnInfo(name="priceId") var priceId : Int = 0
+                      ) : Serializable

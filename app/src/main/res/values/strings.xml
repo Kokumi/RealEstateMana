@@ -44,9 +44,11 @@ It long just to have make the body of this screen properly.</string>
     <string name="edit_city">city</string>
     <string name="edit_country">country</string>
     <string name="edit_postal">Postal Code</string>
-    <string name="edit_apartement">apartement</string>
+    <string name="edit_apartment">apartment</string>
     <string name="edit_finish">Finish</string>
     <string name="edit_edition">Real Estate Edition</string>
+    <string name="edit_image">add image</string>
+    <string name="edit_number_image">number of images: </string>
 
     <string name="toolbar_search">search</string>
 

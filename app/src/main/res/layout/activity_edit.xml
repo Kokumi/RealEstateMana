@@ -114,8 +114,8 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="@string/edit_apartement"
-        android:autofillHints="@string/edit_apartement"
+        android:hint="@string/edit_apartment"
+        android:autofillHints="@string/edit_apartment"
         android:layout_below="@id/edit_description"
         android:layout_toEndOf="@id/edit_postalcode"
         android:layout_marginStart="10dp"/>
@@ -137,5 +137,21 @@
         android:textSize="50sp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/edit_image_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_address"
+        android:layout_margin="10dp"
+        android:text="@string/edit_number_image"/>
+
+    <Button
+        android:id="@+id/edit_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_image_number"
+        android:layout_marginStart="10dp"
+        android:text="@string/edit_image"/>
 
 </RelativeLayout>

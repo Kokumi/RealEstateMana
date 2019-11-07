@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.model
 
+import android.net.Uri
 import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.controller.DetailFragment
+import com.openclassrooms.realestatemanager.model.Entity.Address
+import com.openclassrooms.realestatemanager.model.Entity.Image
+import com.openclassrooms.realestatemanager.model.Entity.Price
+import com.openclassrooms.realestatemanager.model.Entity.RealEstate
 import java.lang.StringBuilder
 import kotlin.collections.ArrayList
 
@@ -47,13 +52,17 @@ class RealEstateAdapter(pData : List<RealEstate>,
         private val priceView : TextView = cellView.findViewById(R.id.cell_price)
         private val cityView : TextView = cellView.findViewById(R.id.cell_city)
 
-        private var mPrice :Price? = null
+        private var mPrice : Price? = null
         private var mAddress : Address? = null
 
         override fun processFinish(priceOutput: Price?, addressOutput : Address?) {
             if(priceOutput != null){ priceDisplay(priceOutput) ; pParent.mPriceData.add(priceOutput)}
 
             if(addressOutput != null) {addressDisplay(addressOutput) ; pParent.mAddressData.add(addressOutput)}
+        }
+
+        override fun imageFinish(imageOutput: Image) {
+            imageView.setImageURI(Uri.parse(imageOutput.Uri))
         }
 
         fun display(pRealEstate: RealEstate, pActivity: AppCompatActivity){
@@ -67,6 +76,10 @@ class RealEstateAdapter(pData : List<RealEstate>,
             val address = AddressTask(database)
             address.delegate = this
             address.execute(pRealEstate.addressId)
+
+            val image = ImageTask(database)
+            image.delegate = this
+            image.execute(pRealEstate.id)
 
 
             cellView.setOnClickListener {
@@ -88,7 +101,7 @@ class RealEstateAdapter(pData : List<RealEstate>,
         }
     }
 
-    class PriceTask( private val pDatabase : AppDatabase) : AsyncTask<Int,Void,Price>(){
+    class PriceTask( private val pDatabase : AppDatabase) : AsyncTask<Int,Void, Price>(){
         var delegate : AsyncResponse? = null
 
         override fun onPostExecute(result: Price?) {
@@ -100,12 +113,12 @@ class RealEstateAdapter(pData : List<RealEstate>,
 
         override fun doInBackground(vararg p0: Int?): Price? {
 
-            return if(p0.get(0)!= null) pDatabase.realEstateDao().getPriceById(p0.get(0) as Int)
+            return if(p0[0]!= null) pDatabase.realEstateDao().getPriceById(p0[0] as Int)
                 else null
         }
     }
 
-    class AddressTask( private val pDatabase: AppDatabase) : AsyncTask<Int,Void,Address>(){
+    class AddressTask( private val pDatabase: AppDatabase) : AsyncTask<Int,Void, Address>(){
         var delegate : AsyncResponse? = null
 
         override fun onPostExecute(result: Address) {
@@ -116,11 +129,31 @@ class RealEstateAdapter(pData : List<RealEstate>,
         }
 
         override fun doInBackground(vararg p0: Int?): Address {
-            return if(p0.get(0) != null) pDatabase.realEstateDao().getAddressById(p0.get(0) as Int)
-                else Address(0,"","","NotFound","")
+            return if(p0[0] != null) pDatabase.realEstateDao().getAddressById(p0[0] as Int)
+                else Address(0, "", "", "NotFound", "")
+        }
+    }
+
+    class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int,Void, Image>(){
+        var delegate : AsyncResponse? = null
+        override fun onPostExecute(result: Image?) {
+            if(result != null) delegate!!.imageFinish(result)
+
+            this.cancel(true)
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: Int?): Image? {
+            if(p0[0] != null){
+                val imageData = pDatabase.realEstateDao().getImageOfEstate(p0[0] as Int)
+                return if(imageData.isNotEmpty()) imageData[0] else null
+            } else {
+                return null
+            }
         }
     }
 
 }interface AsyncResponse{
     fun processFinish(priceOutput: Price? = null, addressOutput : Address? = null)
+    fun imageFinish(imageOutput : Image)
 }

@@ -1,6 +1,10 @@
 package com.openclassrooms.realestatemanager.model
 
 import androidx.room.*
+import com.openclassrooms.realestatemanager.model.Entity.Address
+import com.openclassrooms.realestatemanager.model.Entity.Image
+import com.openclassrooms.realestatemanager.model.Entity.Price
+import com.openclassrooms.realestatemanager.model.Entity.RealEstate
 
 /**
  * Created by Debruyckère Florian on 10/10/2019.
@@ -19,6 +23,9 @@ interface RealEstateDao {
     @Query("SELECT * FROM Address WHERE id == (:pId)")
     fun getAddressById(pId: Int) : Address
 
+    @Query("SELECT * FROM Image WHERE id== (:pId)")
+    fun getImageOfEstate(pId: Int): List<Image>
+
     @Insert
     fun insertEstate(realEstates : RealEstate)
 
@@ -27,6 +34,9 @@ interface RealEstateDao {
 
     @Insert
     fun insertAddress(pAddress: Address): Long
+
+    @Insert
+    fun insertImage(pImage: Image)
 
     @Transaction
     fun insertNewRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address){
@@ -47,7 +57,7 @@ interface RealEstateDao {
     fun updateEstate(pRealEstate: RealEstate)
 
     @Transaction
-    fun updateRealEstate(pRealEstate: RealEstate,pPrice: Price,pAddress: Address){
+    fun updateRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address){
         val priceId = updatePrice(pPrice)
         val addressId = updateAddress(pAddress)
         pRealEstate.addressId=addressId

@@ -1,8 +1,13 @@
 package com.openclassrooms.realestatemanager.controller
 
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,22 +15,38 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.model.Address
-import com.openclassrooms.realestatemanager.model.Price
-import com.openclassrooms.realestatemanager.model.RealEstate
+import com.openclassrooms.realestatemanager.model.AppDatabase
+import com.openclassrooms.realestatemanager.model.Entity.Address
+import com.openclassrooms.realestatemanager.model.Entity.Image
+import com.openclassrooms.realestatemanager.model.Entity.Price
+import com.openclassrooms.realestatemanager.model.Entity.RealEstate
+import com.openclassrooms.realestatemanager.model.FragmentMediaAdapter
 import java.lang.StringBuilder
 
 /**
  * Fragment to show Detail of a RealEstate
  */
-class DetailFragment : Fragment() {
+class DetailFragment : Fragment(), AsyncImageOutput {
 
     private var realEstateData : RealEstate? = null
     private var priceData : Price? = null
     private var addressData : Address? = null
+    private var mView : View? = null
+
+
+    override fun imageFinish(imagesOutput: ArrayList<Image>) {
+
+
+        val mAdapter = FragmentMediaAdapter(imagesOutput,this.context!!)
+        val recyclerView = mView!!.findViewById(R.id.fragment_media) as RecyclerView
+        recyclerView.layoutManager =LinearLayoutManager(this.context)
+        recyclerView.adapter =mAdapter
+    }
 
     companion object{
         fun newInstance(pRealEstate: RealEstate?, pPrice: Price, pAddress: Address) = DetailFragment().apply{
@@ -40,12 +61,16 @@ class DetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
+        mView = view
         // Inflate the layout for this fragment
         display(view)
         buttonConfig(view)
 
-
-        //return inflater.inflate(R.layout.fragment_detail, container, false)
+        if(realEstateData != null) {
+            val imageTask = ImageTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build(),activity!!.baseContext)
+            imageTask.delegate = this
+            imageTask.execute(realEstateData!!.id)
+        }
         return view
     }
 
@@ -107,4 +132,35 @@ class DetailFragment : Fragment() {
             startActivity(intent)
         }
     }
+
+class ImageTask(private val pDatabase: AppDatabase,private val pContext: Context) : AsyncTask<Int, Void, ArrayList<Image>>(){
+        var delegate : AsyncImageOutput? = null
+        override fun onPostExecute(result: ArrayList<Image>?) {
+            if(result != null) delegate!!.imageFinish(result)
+
+
+            this.cancel(true)
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: Int?): ArrayList<Image>? {
+            if(p0[0] != null){
+                val imageData = pDatabase.realEstateDao().getImageOfEstate(p0[0] as Int) as ArrayList<Image>
+
+                /*val bitmapArray = ArrayList<Bitmap>()
+                for(image in imageData) {
+                    val bitmapObject = MediaStore.Images.Media.getBitmap(pContext.contentResolver, Uri.parse(image.Uri))
+                    bitmapArray.add(bitmapObject)
+                }*/
+
+                return imageData
+            } else {
+                return null
+            }
+        }
+    }
+
+}
+interface AsyncImageOutput{
+    fun imageFinish(imagesOutput : ArrayList<Image>)
 }
