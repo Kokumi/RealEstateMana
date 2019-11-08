@@ -16,7 +16,11 @@ import java.io.Serializable
                 ForeignKey(
                         entity = Price::class,
                         parentColumns = arrayOf("id"),
-                        childColumns = arrayOf("priceId")
+                        childColumns = arrayOf("priceId")),
+                ForeignKey(
+                        entity = Agent::class,
+                        parentColumns = arrayOf("id"),
+                        childColumns = arrayOf("agentId")
                 )
         ))
 data class RealEstate(@PrimaryKey(autoGenerate = true) val id: Int = 0,

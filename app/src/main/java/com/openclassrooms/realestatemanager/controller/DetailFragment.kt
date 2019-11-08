@@ -21,10 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.AppDatabase
-import com.openclassrooms.realestatemanager.model.Entity.Address
-import com.openclassrooms.realestatemanager.model.Entity.Image
-import com.openclassrooms.realestatemanager.model.Entity.Price
-import com.openclassrooms.realestatemanager.model.Entity.RealEstate
+import com.openclassrooms.realestatemanager.model.Entity.*
 import com.openclassrooms.realestatemanager.model.FragmentMediaAdapter
 import java.lang.StringBuilder
 
@@ -36,6 +33,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
     private var realEstateData : RealEstate? = null
     private var priceData : Price? = null
     private var addressData : Address? = null
+    private var agentData : Agent? = null
     private var mView : View? = null
 
 
@@ -49,10 +47,11 @@ class DetailFragment : Fragment(), AsyncImageOutput {
     }
 
     companion object{
-        fun newInstance(pRealEstate: RealEstate?, pPrice: Price, pAddress: Address) = DetailFragment().apply{
+        fun newInstance(pRealEstate: RealEstate?, pPrice: Price, pAddress: Address,pAgent: Agent) = DetailFragment().apply{
             realEstateData = pRealEstate
             priceData = pPrice
             addressData = pAddress
+            agentData = pAgent
         }
     }
 
@@ -84,7 +83,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         val statusText = pView.findViewById(R.id.fragment_status_text) as TextView
         val dateEntreeText = pView.findViewById(R.id.fragment_date_entree_text)as TextView
         val dateVenteText = pView.findViewById(R.id.fragment_date_vente_text) as TextView
-        //val agentText = pView.findViewById(R.id.fragment_agent_text) as TextView
+        val agentText = pView.findViewById(R.id.fragment_agent_text) as TextView
         val recyclerView = pView.findViewById(R.id.fragment_media) as RecyclerView
 
         if(realEstateData != null){
@@ -103,6 +102,8 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
             dateEntreeText.text = realEstateData!!.dateEntree
             dateVenteText.text = realEstateData!!.dateVente
+
+            agentText.text = agentData!!.name
 
             val llm = LinearLayoutManager(activity?.applicationContext)
             llm.orientation = LinearLayoutManager.HORIZONTAL
@@ -125,6 +126,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
             intent.putExtra("SELECTION",realEstateData)
             intent.putExtra("SELECTION_PRICE",priceData)
             intent.putExtra("SELECTION_ADDRESS",addressData)
+            intent.putExtra("SELECTION_AGENT",agentData)
             startActivity(intent)
         }
         createButton.setOnClickListener{

@@ -9,11 +9,8 @@ import android.os.Bundle
 import android.widget.*
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.model.Entity.Address
 import com.openclassrooms.realestatemanager.model.AppDatabase
-import com.openclassrooms.realestatemanager.model.Entity.Image
-import com.openclassrooms.realestatemanager.model.Entity.Price
-import com.openclassrooms.realestatemanager.model.Entity.RealEstate
+import com.openclassrooms.realestatemanager.model.Entity.*
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.lang.Exception
 import java.lang.StringBuilder
@@ -25,6 +22,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
     private var realEstateData : RealEstate? = null
     private var priceData : Price? = null
     private var addressData : Address? = null
+    private var agentData : Agent? = null
     private var mExisting = false
     private val gallery= 1
 
@@ -39,6 +37,8 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         priceData = if(intent.extras?.get("SELECTION_PRICE") != null) intent.extras?.get("SELECTION_PRICE") as Price
         else null
         addressData = if(intent.extras?.get("SELECTION_ADDRESS") != null) intent.extras?.get("SELECTION_ADDRESS") as Address
+        else null
+        agentData = if(intent.extras?.get("SELECTION_AGENT") != null) intent.extras?.get("SELECTION_AGENT") as Agent
         else null
 
         if(realEstateData!= null && priceData!=null && addressData!=null) mExisting = true
@@ -55,6 +55,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         val rED = realEstateData
         val pD = priceData
         val aD = addressData
+        val agD = agentData
 
         val editType = findViewById<EditText>(R.id.edit_type)
         val editPrice = findViewById<EditText>(R.id.edit_price)
@@ -63,27 +64,31 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         val editCity = findViewById<EditText>(R.id.edit_city)
         val editCountry = findViewById<EditText>(R.id.edit_country)
         val editApartment = findViewById<EditText>(R.id.edit_apartment)
-        //val editPostal = findViewById<EditText>(R.id.edit_postalcode)
+        val editAgent = findViewById<EditText>(R.id.edit_agent)
         val editDescription = findViewById<EditText>(R.id.edit_description)
         val editSurface = findViewById<EditText>(R.id.edit_surface)
         val editStatus = findViewById<Spinner>(R.id.edit_status)
         val finishButton = findViewById<Button>(R.id.edit_validation)
         val imageButton  = findViewById<Button>(R.id.edit_image)
-        nbImageText = findViewById<TextView>(R.id.edit_image_number)
+        nbImageText = findViewById(R.id.edit_image_number)
 
         spinnerConfiguration(editStatus)
 
         if(realEstateData != null){
-            editType.setText(rED?.type)
+
             editPrice.setText(pD!!.value.toString())
+            switchPriceType.isChecked = pD.isDollar
+
+            editAgent.setText(agD!!.name)
+
+            editDescription.setText(rED!!.description)
+            editSurface.setText(rED.surface.toString())
+            editType.setText(rED.type)
+
             editAddress.setText(aD!!.address)
             editCity.setText(aD.city)
             editCountry.setText(aD.country)
             editApartment.setText(aD.apartment)
-            //editPostal.setText(addressData!!.postal)
-            editDescription.setText(rED!!.description)
-            editSurface.setText(rED.surface.toString())
-            switchPriceType.isChecked = pD.isDollar
 
             val imageTask = ImageTask(Room.databaseBuilder(this,AppDatabase::class.java,"database").build())
             imageTask.delegate = this
@@ -102,9 +107,10 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         finishButton.setOnClickListener{
 
             val todayDay = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(Date())
-            if(priceData == null && realEstateData == null && addressData == null){
+            if(priceData == null && realEstateData == null && addressData == null && agentData == null){
                 priceData = Price(value = if (editPrice.text != null) Integer.parseInt(editPrice.text.toString()) else 0,
                         isDollar = switchPriceType.isChecked)
+
 
                 addressData = Address(address = if (editAddress.text != null) editAddress.text.toString() else "",
                         apartment = if (editApartment.text != null) editApartment.text.toString() else "",
@@ -119,8 +125,9 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
                         addressId = addressData!!.id,
                         priceId = priceData!!.id,
                         dateEntree = todayDay,
-                        dateVente = if (editStatus.selectedItemPosition == 2) todayDay else "not sold"
-                )
+                        dateVente = if (editStatus.selectedItemPosition == 2) todayDay else "not sold")
+
+                agentData = Agent(name= if(editAgent.text != null) editAgent.text.toString() else "")
             }else{
                 priceData!!.value = if(editPrice.text != null) Integer.parseInt( editPrice.text.toString()) else 0
                 priceData!!.isDollar = switchPriceType.isChecked
@@ -133,10 +140,12 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
                 realEstateData!!.surface = if(editSurface.text != null) Integer.parseInt(editSurface.text.toString()) else 0
                 realEstateData!!.statut = editStatus.selectedItem.toString()
                 realEstateData!!.dateVente = if(editStatus.selectedItemPosition == 2)todayDay else "not sold"
+                agentData!!.name =if(editAgent.text != null) editAgent.text.toString() else ""
             }
 
             println(realEstateData!!.statut)
-            val saveTask = SaveEditTask(priceData as Price,realEstateData as RealEstate, addressData as Address,
+            val saveTask = SaveEditTask(priceData as Price,realEstateData as RealEstate,
+                    addressData as Address,agentData as Agent,
                     this, mExisting)
             saveTask.execute()
         }
@@ -175,7 +184,8 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
     }
 
-    class SaveEditTask(private val pPrice: Price, private val pRealEstate: RealEstate, private val pAddress: Address,
+    class SaveEditTask(private val pPrice: Price, private val pRealEstate: RealEstate,
+                       private val pAddress: Address, private val pAgent: Agent,
                        private val pContext : Context, private val pExisting : Boolean)
         : AsyncTask<Void,Void,Boolean>(){
         override fun onPostExecute(result: Boolean) {
@@ -193,9 +203,9 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
             val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
             try{
                 if(pExisting)
-                    db.realEstateDao().updateRealEstate(pRealEstate,pPrice,pAddress)
+                    db.realEstateDao().updateRealEstate(pRealEstate,pPrice,pAddress,pAgent)
                 else
-                    db.realEstateDao().insertNewRealEstate(pRealEstate,pPrice,pAddress)
+                    db.realEstateDao().insertNewRealEstate(pRealEstate,pPrice,pAddress,pAgent)
                 return true
             }
             catch (e : Exception){

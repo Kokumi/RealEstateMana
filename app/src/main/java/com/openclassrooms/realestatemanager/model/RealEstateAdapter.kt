@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.controller.DetailFragment
-import com.openclassrooms.realestatemanager.model.Entity.Address
-import com.openclassrooms.realestatemanager.model.Entity.Image
-import com.openclassrooms.realestatemanager.model.Entity.Price
-import com.openclassrooms.realestatemanager.model.Entity.RealEstate
+import com.openclassrooms.realestatemanager.model.Entity.*
 import java.lang.StringBuilder
 import kotlin.collections.ArrayList
 
@@ -44,6 +41,8 @@ class RealEstateAdapter(pData : List<RealEstate>,
         holder.display(mData[position],pActivity)
     }
 
+
+
     class ViewHolder(private val cellView: View,private val pParent : RealEstateAdapter) : RecyclerView.ViewHolder(cellView),
         AsyncResponse{
 
@@ -54,6 +53,7 @@ class RealEstateAdapter(pData : List<RealEstate>,
 
         private var mPrice : Price? = null
         private var mAddress : Address? = null
+        private var mAgent : Agent? = null
 
         override fun processFinish(priceOutput: Price?, addressOutput : Address?) {
             if(priceOutput != null){ priceDisplay(priceOutput) ; pParent.mPriceData.add(priceOutput)}
@@ -63,6 +63,10 @@ class RealEstateAdapter(pData : List<RealEstate>,
 
         override fun imageFinish(imageOutput: Image) {
             imageView.setImageURI(Uri.parse(imageOutput.Uri))
+        }
+
+        override fun agentFinish(agentOutput: Agent) {
+            mAgent= agentOutput
         }
 
         fun display(pRealEstate: RealEstate, pActivity: AppCompatActivity){
@@ -81,10 +85,14 @@ class RealEstateAdapter(pData : List<RealEstate>,
             image.delegate = this
             image.execute(pRealEstate.id)
 
+            val agent = AgentTask(database)
+            agent.delegate = this
+            agent.execute(pRealEstate.id)
+
 
             cellView.setOnClickListener {
 
-                val dF = DetailFragment.newInstance(pRealEstate, mPrice!!, mAddress!!)
+                val dF = DetailFragment.newInstance(pRealEstate, mPrice!!, mAddress!!,mAgent!!)
                 pActivity.supportFragmentManager.beginTransaction().replace(R.id.main_detail_fragment, dF).commit()
             }
         }
@@ -153,7 +161,26 @@ class RealEstateAdapter(pData : List<RealEstate>,
         }
     }
 
+    class AgentTask(private val pDatabase: AppDatabase) : AsyncTask<Int,Void, Agent>(){
+        var delegate : AsyncResponse? = null
+        override fun onPostExecute(result: Agent?) {
+            if(result != null) delegate!!.agentFinish(result)
+
+            this.cancel(true)
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: Int?): Agent? {
+            if(p0[0] != null){
+                return pDatabase.realEstateDao().getAgent(p0[0] as Int)
+            } else {
+                return null
+            }
+        }
+    }
+
 }interface AsyncResponse{
     fun processFinish(priceOutput: Price? = null, addressOutput : Address? = null)
     fun imageFinish(imageOutput : Image)
+    fun agentFinish(agentOutput : Agent)
 }

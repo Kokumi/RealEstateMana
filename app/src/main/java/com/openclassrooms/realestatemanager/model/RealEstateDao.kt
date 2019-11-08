@@ -1,10 +1,7 @@
 package com.openclassrooms.realestatemanager.model
 
 import androidx.room.*
-import com.openclassrooms.realestatemanager.model.Entity.Address
-import com.openclassrooms.realestatemanager.model.Entity.Image
-import com.openclassrooms.realestatemanager.model.Entity.Price
-import com.openclassrooms.realestatemanager.model.Entity.RealEstate
+import com.openclassrooms.realestatemanager.model.Entity.*
 
 /**
  * Created by Debruyckère Florian on 10/10/2019.
@@ -26,6 +23,12 @@ interface RealEstateDao {
     @Query("SELECT * FROM Image WHERE id== (:pId)")
     fun getImageOfEstate(pId: Int): List<Image>
 
+    @Query("SELECT * FROM Agent WHERE id== (:pId)")
+    fun getAgent(pId: Int): Agent
+
+    @Query("SELECT * FROM Agent WHERE name== (:pName)")
+    fun getAgentByName(pName: String): Agent?
+
     @Insert
     fun insertEstate(realEstates : RealEstate)
 
@@ -38,10 +41,16 @@ interface RealEstateDao {
     @Insert
     fun insertImage(pImage: Image)
 
+    @Insert
+    fun insertAgent(pAgent : Agent) : Long
+
     @Transaction
-    fun insertNewRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address){
+    fun insertNewRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address, pAgent: Agent){
         val priceId = insertPrice(pPrice)
         val addressId = insertAddress(pAddress)
+        val agentId : Int = if(getAgentByName(pAgent.name) != null) getAgentByName(pAgent.name)!!.id else insertAgent(pAgent).toInt()
+
+        pRealEstate.agentId = agentId
         pRealEstate.priceId = priceId.toInt()
         pRealEstate.addressId = addressId.toInt()
         insertEstate(pRealEstate)
@@ -57,9 +66,12 @@ interface RealEstateDao {
     fun updateEstate(pRealEstate: RealEstate)
 
     @Transaction
-    fun updateRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address){
+    fun updateRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address, pAgent: Agent){
         val priceId = updatePrice(pPrice)
         val addressId = updateAddress(pAddress)
+        val agentId : Int = if(getAgentByName(pAgent.name) != null) getAgentByName(pAgent.name)!!.id else insertAgent(pAgent).toInt()
+
+        pRealEstate.agentId = agentId
         pRealEstate.addressId=addressId
         pRealEstate.priceId=priceId
         updateEstate(pRealEstate)
