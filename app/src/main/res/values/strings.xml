@@ -27,6 +27,8 @@ It long just to have make the body of this screen properly.</string>
     <string name="fragment_date_vente_base">unknown</string>
     <string name="fragment_button_edit">Edit</string>
     <string name="fragment_button_new">Create</string>
+    <string name="fragment_interest_title">Interest</string>
+    <string name="fragment_interest_text">nothing</string>
 
     <string name="media_description">Image of the selected realEstate</string>
 
@@ -49,6 +51,7 @@ It long just to have make the body of this screen properly.</string>
     <string name="edit_edition">Real Estate Edition</string>
     <string name="edit_image">add image</string>
     <string name="edit_number_image">number of images: </string>
+    <string name="edit_interest_button">add interest</string>
 
     <string name="toolbar_search">search</string>
 

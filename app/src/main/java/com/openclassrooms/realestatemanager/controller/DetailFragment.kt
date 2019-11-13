@@ -3,11 +3,8 @@ package com.openclassrooms.realestatemanager.controller
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -23,6 +19,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Entity.*
 import com.openclassrooms.realestatemanager.model.FragmentMediaAdapter
+import java.lang.NumberFormatException
 import java.lang.StringBuilder
 
 /**
@@ -42,8 +39,22 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
         val mAdapter = FragmentMediaAdapter(imagesOutput,this.context!!)
         val recyclerView = mView!!.findViewById(R.id.fragment_media) as RecyclerView
-        recyclerView.layoutManager =LinearLayoutManager(this.context)
+        val llm = LinearLayoutManager(this.context)
+        llm.orientation = LinearLayoutManager.HORIZONTAL
+        recyclerView.layoutManager =(llm)
+        //recyclerView.layoutManager =LinearLayoutManager(this.context)
         recyclerView.adapter =mAdapter
+    }
+
+    override fun interessFinish(interessOutput: ArrayList<Interess>) {
+        val interestText = mView!!.findViewById<TextView>(R.id.fragment_Interest_text)
+        interestText.text = if(interessOutput.size == 0) "nothing" else ""
+        interestText.text = "${interestText.text}"
+
+        for(interest in interessOutput){
+            interestText.text = if(interestText.text == "") interest.name else StringBuilder( "${interestText.text} \n ${interest.name}")
+        }
+
     }
 
     companion object{
@@ -84,7 +95,6 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         val dateEntreeText = pView.findViewById(R.id.fragment_date_entree_text)as TextView
         val dateVenteText = pView.findViewById(R.id.fragment_date_vente_text) as TextView
         val agentText = pView.findViewById(R.id.fragment_agent_text) as TextView
-        val recyclerView = pView.findViewById(R.id.fragment_media) as RecyclerView
 
         if(realEstateData != null){
             warningLayout.visibility = View.GONE
@@ -105,10 +115,9 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
             agentText.text = agentData!!.name
 
-            val llm = LinearLayoutManager(activity?.applicationContext)
-            llm.orientation = LinearLayoutManager.HORIZONTAL
-            recyclerView.layoutManager =(llm)
-            //recyclerView.adapter = FragmentMediaAdapter(realEstateData!!.imageList, activity!!.applicationContext)
+            val interessTask = InteressTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
+            interessTask.delegate = this
+            interessTask.execute(realEstateData!!.Interess)
 
         }else{
             warningLayout.visibility = View.VISIBLE
@@ -147,7 +156,6 @@ class ImageTask(private val pDatabase: AppDatabase,private val pContext: Context
 
         override fun doInBackground(vararg p0: Int?): ArrayList<Image>? {
             if(p0[0] != null){
-                val imageData = pDatabase.realEstateDao().getImageOfEstate(p0[0] as Int) as ArrayList<Image>
 
                 /*val bitmapArray = ArrayList<Bitmap>()
                 for(image in imageData) {
@@ -155,14 +163,39 @@ class ImageTask(private val pDatabase: AppDatabase,private val pContext: Context
                     bitmapArray.add(bitmapObject)
                 }*/
 
-                return imageData
+                return pDatabase.realEstateDao().getImageOfEstate(p0[0] as Int) as ArrayList<Image>
             } else {
                 return null
             }
         }
     }
 
+    class InteressTask(private val pDatabase: AppDatabase) :AsyncTask<String,Void,ArrayList<Interess>>(){
+        var delegate : AsyncImageOutput? = null
+        override fun onPostExecute(result: ArrayList<Interess>) {
+            delegate!!.interessFinish(result)
+            super.onPostExecute(result)
+            this.cancel(true)
+        }
+
+        override fun doInBackground(vararg p0: String?): ArrayList<Interess> {
+            val result : ArrayList<Interess> = ArrayList()
+            val listId = p0[0]!!.reader().readLines()
+            for(idString in listId){
+               try{
+                   val idInt = idString.toInt()
+                   val retrieve: Interess = pDatabase.realEstateDao().getInteressByID(idInt)
+                   result.add(retrieve)
+               }catch (e : NumberFormatException){
+                    e.printStackTrace()
+               }
+            }
+            return result
+        }
+    }
+
 }
 interface AsyncImageOutput{
     fun imageFinish(imagesOutput : ArrayList<Image>)
+    fun interessFinish(interessOutput : ArrayList<Interess>)
 }

@@ -9,7 +9,7 @@ import com.openclassrooms.realestatemanager.model.Entity.*
 /**
  * Created by Debruyckère Florian on 10/10/2019.
  */
-@Database(entities = [RealEstate::class, Price::class, Address::class, Image::class, Agent::class],version = 1)
+@Database(entities = [RealEstate::class, Price::class, Address::class, Image::class, Agent::class,Interess::class],version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun realEstateDao(): RealEstateDao
 

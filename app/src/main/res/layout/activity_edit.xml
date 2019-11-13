@@ -154,4 +154,24 @@
         android:layout_marginStart="10dp"
         android:text="@string/edit_image"/>
 
+    <EditText
+        android:id="@+id/edit_interest"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/fragment_interest_title"
+        android:autofillHints="@string/fragment_interest_title"
+        android:layout_below="@+id/edit_address"
+        android:layout_toEndOf="@+id/edit_image_number"
+        android:layout_marginStart="20dp"/>
+
+    <Button
+        android:id="@+id/edit_interest_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_interest"
+        android:layout_toEndOf="@id/edit_image_number"
+        android:text="@string/edit_interest_button"
+        android:layout_marginStart="20dp"/>
+
 </RelativeLayout>

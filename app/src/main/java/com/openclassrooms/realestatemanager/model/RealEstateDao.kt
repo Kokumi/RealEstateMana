@@ -29,6 +29,9 @@ interface RealEstateDao {
     @Query("SELECT * FROM Agent WHERE name== (:pName)")
     fun getAgentByName(pName: String): Agent?
 
+    @Query("SELECT * FROM Interess WHERE id== (:pId)")
+    fun getInteressByID(pId: Int): Interess
+
     @Insert
     fun insertEstate(realEstates : RealEstate)
 
@@ -55,6 +58,9 @@ interface RealEstateDao {
         pRealEstate.addressId = addressId.toInt()
         insertEstate(pRealEstate)
     }
+
+    @Insert
+    fun insertInterest(pInterest : Interess) : Long
 
     @Update
     fun updatePrice(pPrice: Price):Int

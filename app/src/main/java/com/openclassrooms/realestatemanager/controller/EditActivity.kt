@@ -51,6 +51,12 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         nbImageText!!.text = StringBuilder(getString(R.string.edit_number_image) + pImageData.size)
     }
 
+    override fun interestAdder(pId: Long) {
+        if(pId.toInt() != 0){
+            realEstateData!!.Interess = "${realEstateData!!.Interess}${pId.toInt()}\n"
+        }
+    }
+
     private fun display(){
         val rED = realEstateData
         val pD = priceData
@@ -71,6 +77,8 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         val finishButton = findViewById<Button>(R.id.edit_validation)
         val imageButton  = findViewById<Button>(R.id.edit_image)
         nbImageText = findViewById(R.id.edit_image_number)
+        val editInterest = findViewById<EditText>(R.id.edit_interest)
+        val buttonInterest = findViewById<Button>(R.id.edit_interest_button)
 
         spinnerConfiguration(editStatus)
 
@@ -99,9 +107,25 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
 
 
         imageButton.setOnClickListener{
-            val imageIntent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(imageIntent,gallery)
+            if(realEstateData != null) {
+                val imageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                startActivityForResult(imageIntent, gallery)
+            }
+            else{
+                Toast.makeText(this, "Real estate doesn't exist!",Toast.LENGTH_SHORT).show() }
         }
+
+
+        buttonInterest.setOnClickListener{
+            if(realEstateData != null) {
+                val interestTask = AddInterestTask(this)
+                interestTask.delegate = this
+                interestTask.execute(Interess(0, editInterest.text.toString()))
+            }
+            else{
+            Toast.makeText(this, "Real estate doesn't exist!",Toast.LENGTH_SHORT).show() }
+        }
+
 
 
         finishButton.setOnClickListener{
@@ -230,6 +254,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
 
 
     class AddImageTask(private val pContext: Context) : AsyncTask<Image,Void,Boolean>(){
+
         override fun onPostExecute(result: Boolean) {
             Toast.makeText(pContext,if(result) "image saved" else "Error",Toast.LENGTH_SHORT).show()
             this.cancel(true)
@@ -248,7 +273,31 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
     }
 
+    class AddInterestTask(private val pContext: Context) : AsyncTask<Interess,Void,Long>(){
+        var delegate : ImageTaskRecepter? = null
+
+        override fun onPostExecute(result: Long) {
+            Toast.makeText(pContext,if(result!= null) "interest saved" else "Error",Toast.LENGTH_SHORT).show()
+            delegate!!.interestAdder(result)
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: Interess?): Long {
+
+            var interestId : Long
+            val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
+            try{
+                interestId = db.realEstateDao().insertInterest(p0[0]!!)
+                return interestId
+            } catch (e : Exception){
+                e.printStackTrace()
+                return 0
+            }
+        }
+    }
+
 }
 interface ImageTaskRecepter{
     fun imageRecepter(pImageData : ArrayList<Image>)
+    fun interestAdder(pId: Long)
 }
