@@ -13,6 +13,7 @@ import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.controller.DetailFragment
 import com.openclassrooms.realestatemanager.model.Entity.*
+import java.io.File
 import java.lang.StringBuilder
 import kotlin.collections.ArrayList
 
@@ -62,6 +63,7 @@ class RealEstateAdapter(pData : List<RealEstate>,
         }
 
         override fun imageFinish(imageOutput: Image) {
+            val file = File(Uri.parse(imageOutput.Uri).path)
             imageView.setImageURI(Uri.parse(imageOutput.Uri))
         }
 

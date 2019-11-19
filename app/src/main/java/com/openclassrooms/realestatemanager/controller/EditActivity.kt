@@ -12,6 +12,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Entity.*
 import kotlinx.android.synthetic.main.activity_edit.*
+import java.io.File
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.text.SimpleDateFormat
@@ -108,8 +109,12 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
 
         imageButton.setOnClickListener{
             if(realEstateData != null) {
-                val imageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(imageIntent, gallery)
+                //val imageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                val imageIntent = Intent()
+                imageIntent.type = "*/*"
+                imageIntent.action = Intent.ACTION_GET_CONTENT
+                startActivityForResult(Intent.createChooser(imageIntent,"Select Image"),gallery)
+                //startActivityForResult(imageIntent, gallery)
             }
             else{
                 Toast.makeText(this, "Real estate doesn't exist!",Toast.LENGTH_SHORT).show() }
@@ -179,6 +184,8 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         if(resultCode != Activity.RESULT_CANCELED && requestCode == gallery){
             if(data!=null){
                 if(realEstateData!= null) {
+                    val file = File(data.data!!.path).extension
+                    println(file)
                     val contentURI = data.data
                     val task = AddImageTask(this.baseContext)
                     task.execute(Image(realEstateData!!.id, contentURI!!.toString()))
@@ -276,15 +283,15 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
     class AddInterestTask(private val pContext: Context) : AsyncTask<Interess,Void,Long>(){
         var delegate : ImageTaskRecepter? = null
 
-        override fun onPostExecute(result: Long) {
+        override fun onPostExecute(result: Long?) {
             Toast.makeText(pContext,if(result!= null) "interest saved" else "Error",Toast.LENGTH_SHORT).show()
-            delegate!!.interestAdder(result)
+            delegate!!.interestAdder(result!!)
             super.onPostExecute(result)
         }
 
         override fun doInBackground(vararg p0: Interess?): Long {
 
-            var interestId : Long
+            val interestId : Long
             val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
             try{
                 interestId = db.realEstateDao().insertInterest(p0[0]!!)
