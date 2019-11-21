@@ -3,15 +3,19 @@ package com.openclassrooms.realestatemanager.controller
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+
 import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -19,8 +23,9 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Entity.*
 import com.openclassrooms.realestatemanager.model.FragmentMediaAdapter
-import java.lang.NumberFormatException
-import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 /**
  * Fragment to show Detail of a RealEstate
@@ -42,19 +47,25 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         val llm = LinearLayoutManager(this.context)
         llm.orientation = LinearLayoutManager.HORIZONTAL
         recyclerView.layoutManager =(llm)
-        //recyclerView.layoutManager =LinearLayoutManager(this.context)
         recyclerView.adapter =mAdapter
     }
 
-    override fun interessFinish(interessOutput: ArrayList<Interess>) {
+    override fun interestFinish(interestOutput: ArrayList<Interess>) {
         val interestText = mView!!.findViewById<TextView>(R.id.fragment_Interest_text)
-        interestText.text = if(interessOutput.size == 0) "nothing" else ""
+        interestText.text = if(interestOutput.size == 0) "nothing" else ""
         interestText.text = "${interestText.text}"
 
-        for(interest in interessOutput){
+        for(interest in interestOutput){
             interestText.text = if(interestText.text == "") interest.name else StringBuilder( "${interestText.text} \n ${interest.name}")
         }
 
+    }
+
+    override fun mapFinish(mapOutput: Bitmap) {
+        if(mView != null) {
+            val mapImage = mView!!.findViewById(R.id.fragment_map) as ImageView
+            mapImage.setImageBitmap(mapOutput)
+        }
     }
 
     companion object{
@@ -81,6 +92,10 @@ class DetailFragment : Fragment(), AsyncImageOutput {
             imageTask.delegate = this
             imageTask.execute(realEstateData!!.id)
         }
+
+        // AIzaSyACRApsQtNqJSIupQcUST_jmv-5TbDTBQM
+
+
         return view
     }
 
@@ -115,15 +130,21 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
             agentText.text = agentData!!.name
 
-            val interessTask = InteressTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
-            interessTask.delegate = this
-            interessTask.execute(realEstateData!!.Interess)
+            val interestTask = InterestTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
+            interestTask.delegate = this
+            interestTask.execute(realEstateData!!.Interess)
+
+
+            val url = URL("https://maps.googleapis.com/maps/api/staticmap" +
+                    "?center="+ "${addressData!!.address},${addressData!!.city},${addressData!!.country}" +
+                    ",CA&zoom=16&size=400x400&key=AIzaSyACRApsQtNqJSIupQcUST_jmv-5TbDTBQM")
+            val mapTask = MapAsyncTask()
+            mapTask.delegate = this
+            mapTask.execute(url)
 
         }else{
             warningLayout.visibility = View.VISIBLE
         }
-
-
     }
 
     private fun buttonConfig(pView: View){
@@ -143,6 +164,8 @@ class DetailFragment : Fragment(), AsyncImageOutput {
             startActivity(intent)
         }
     }
+
+
 
 class ImageTask(private val pDatabase: AppDatabase,private val pContext: Context) : AsyncTask<Int, Void, ArrayList<Image>>(){
         var delegate : AsyncImageOutput? = null
@@ -170,10 +193,10 @@ class ImageTask(private val pDatabase: AppDatabase,private val pContext: Context
         }
     }
 
-    class InteressTask(private val pDatabase: AppDatabase) :AsyncTask<String,Void,ArrayList<Interess>>(){
+    class InterestTask(private val pDatabase: AppDatabase) :AsyncTask<String,Void,ArrayList<Interess>>(){
         var delegate : AsyncImageOutput? = null
         override fun onPostExecute(result: ArrayList<Interess>) {
-            delegate!!.interessFinish(result)
+            delegate!!.interestFinish(result)
             super.onPostExecute(result)
             this.cancel(true)
         }
@@ -194,8 +217,36 @@ class ImageTask(private val pDatabase: AppDatabase,private val pContext: Context
         }
     }
 
+    class MapAsyncTask : AsyncTask<URL,Void,Bitmap>(){
+        var delegate : AsyncImageOutput? = null
+
+        override fun onPostExecute(result: Bitmap?) {
+            if(result != null) delegate!!.mapFinish(result)
+            this.cancel(true)
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: URL): Bitmap? {
+            var result : Bitmap? = null
+                try{
+                    val connection = p0[0].openConnection() as HttpURLConnection
+                    connection.doInput = true
+                    connection.connect()
+
+                    val input = connection.inputStream
+                    result = BitmapFactory.decodeStream(input)
+                }catch (e : Exception){
+                    e.printStackTrace()
+                }
+            return result
+            }
+
+
+    }
 }
+
 interface AsyncImageOutput{
     fun imageFinish(imagesOutput : ArrayList<Image>)
-    fun interessFinish(interessOutput : ArrayList<Interess>)
+    fun interestFinish(interestOutput : ArrayList<Interess>)
+    fun mapFinish(mapOutput : Bitmap)
 }
