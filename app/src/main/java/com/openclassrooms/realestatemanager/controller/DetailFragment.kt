@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.controller
 
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -40,7 +39,6 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
 
     override fun imageFinish(imagesOutput: ArrayList<Image>) {
-
 
         val mAdapter = FragmentMediaAdapter(imagesOutput,this.context!!)
         val recyclerView = mView!!.findViewById(R.id.fragment_media) as RecyclerView
@@ -88,7 +86,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         buttonConfig(view)
 
         if(realEstateData != null) {
-            val imageTask = ImageTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build(),activity!!.baseContext)
+            val imageTask = ImageTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
             imageTask.delegate = this
             imageTask.execute(realEstateData!!.id)
         }
@@ -135,9 +133,12 @@ class DetailFragment : Fragment(), AsyncImageOutput {
             interestTask.execute(realEstateData!!.Interess)
 
 
+            val addressConverted = addressUrlConverter()
             val url = URL("https://maps.googleapis.com/maps/api/staticmap" +
-                    "?center="+ "${addressData!!.address},${addressData!!.city},${addressData!!.country}" +
-                    ",CA&zoom=16&size=400x400&key=AIzaSyACRApsQtNqJSIupQcUST_jmv-5TbDTBQM")
+                    "?center=$addressConverted"+
+                    ",CA&zoom=17&size=400x400&" +
+                    "markers=color:blue%7Clabel:H%7C$addressConverted&" +
+                    "key=AIzaSyACRApsQtNqJSIupQcUST_jmv-5TbDTBQM")
             val mapTask = MapAsyncTask()
             mapTask.delegate = this
             mapTask.execute(url)
@@ -145,6 +146,18 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         }else{
             warningLayout.visibility = View.VISIBLE
         }
+    }
+
+    private fun addressUrlConverter(): String{
+        var converted = ""
+        val toConvert = "${addressData!!.address},${addressData!!.city},${addressData!!.country}"
+
+        val words = toConvert.split(" ").toMutableList()
+        for(word in words){
+            converted += if(words.last() == word)word else "$word+"
+        }
+        println(converted)
+        return converted
     }
 
     private fun buttonConfig(pView: View){
@@ -167,7 +180,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
 
 
-class ImageTask(private val pDatabase: AppDatabase,private val pContext: Context) : AsyncTask<Int, Void, ArrayList<Image>>(){
+class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int, Void, ArrayList<Image>>(){
         var delegate : AsyncImageOutput? = null
         override fun onPostExecute(result: ArrayList<Image>?) {
             if(result != null) delegate!!.imageFinish(result)

@@ -29,6 +29,7 @@ It long just to have make the body of this screen properly.</string>
     <string name="fragment_button_new">Create</string>
     <string name="fragment_interest_title">Interest</string>
     <string name="fragment_interest_text">nothing</string>
+    <string name="fragment_map_description">map</string>
 
     <string name="media_description">Image of the selected realEstate</string>
 
