@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controller;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
@@ -102,12 +103,15 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.tool_search){
-            Toast.makeText(this, "Search Menu", Toast.LENGTH_SHORT).show();
-            //ArrayList<RealEstate> result = new ArrayList<>();
-            showDialog();
-
-            //for(RealEstate current : mRealEstates){}
+        switch (item.getItemId()){
+            case R.id.tool_search:
+                Toast.makeText(this, "Search Menu", Toast.LENGTH_SHORT).show();
+                showDialog();
+                break;
+            case R.id.tool_map:
+                Intent mapIntent = new Intent(this,MapsActivity.class);
+                startActivity(mapIntent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);

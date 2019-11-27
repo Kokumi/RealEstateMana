@@ -55,6 +55,7 @@ It long just to have make the body of this screen properly.</string>
     <string name="edit_interest_button">add interest</string>
 
     <string name="toolbar_search">search</string>
+    <string name="toolbar_map">map</string>
 
     <string name="title_activity_edit">where are you?</string>
     <string name="title_activity_maps">Map</string>

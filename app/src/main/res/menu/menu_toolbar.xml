@@ -10,4 +10,11 @@
         android:icon="@android:drawable/ic_menu_search"
         />
 
+    <item
+        android:id="@+id/tool_map"
+        android:title="@string/toolbar_map"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_dialog_map"
+        />
+
 </menu>
