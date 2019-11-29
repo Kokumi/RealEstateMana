@@ -3,24 +3,31 @@ package com.openclassrooms.realestatemanager.controller
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.room.Room
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import com.openclassrooms.realestatemanager.R
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.openclassrooms.realestatemanager.model.AppDatabase
+import com.openclassrooms.realestatemanager.model.Entity.Address
+import java.io.IOException
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, AsyncAddress {
 
     private lateinit var mMap: GoogleMap
     private var mLocationPermissionGranted = false
@@ -28,6 +35,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var mLastKnowLocation: Location? = null
     //private val mContext : Context? = null
     private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 14
+
+
+    override fun processFinish(addressOutput: ArrayList<Address>) {
+        displayMarker(addressOutput)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,17 +139,49 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: SecurityException) {
             e.printStackTrace()
         }
-        getRealEstate()
+        val asyncTask = AddressTask(Room.databaseBuilder(applicationContext, AppDatabase::class.java, "database").build())
+        asyncTask.delegate = this
+        asyncTask.execute()
     }
 
     /**
-     * get real estate nearby user's location and add marker
+     * get real estate's address nearby user's location and add marker
      */
-    private fun getRealEstate(){
-        //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+    private fun displayMarker(pAddress : ArrayList<Address>){
 
-        //step 1: get address
-        //step 2: get position from address
-        //step 3: add marker to position
+        for(address in pAddress){
+            var geoResult : List<android.location.Address>? = null
+
+            try{
+                geoResult = Geocoder(this).getFromLocationName("${address.address},${address.city},${address.country}"
+                        ,1)
+            }catch (e : IOException){
+                e.printStackTrace()
+            }
+
+            if(geoResult != null && geoResult.isNotEmpty()){
+                val latLng = LatLng(geoResult[0].latitude,geoResult[0].longitude)
+
+                mMap.addMarker(MarkerOptions().position(latLng).title(address.address))
+            }
+        }
     }
+
+    class AddressTask( private val pDatabase: AppDatabase) : AsyncTask<Void, Void, ArrayList<Address>>(){
+        var delegate : AsyncAddress? = null
+
+        override fun onPostExecute(result: ArrayList<Address>) {
+            delegate!!.processFinish(addressOutput = result)
+            //pHolder.addressDisplay(result)
+            super.onPostExecute(result)
+            this.cancel(true)
+        }
+
+        override fun doInBackground(vararg p0: Void?): ArrayList<Address> {
+            return pDatabase.realEstateDao().getAllAddress() as ArrayList<Address>
+        }
+    }
+}
+interface AsyncAddress{
+    fun processFinish(addressOutput : ArrayList<Address>)
 }

@@ -20,6 +20,9 @@ interface RealEstateDao {
     @Query("SELECT * FROM Address WHERE id == (:pId)")
     fun getAddressById(pId: Int) : Address
 
+    @Query("SELECT * FROM Address")
+    fun getAllAddress(): List<Address>
+
     @Query("SELECT * FROM Image WHERE id== (:pId)")
     fun getImageOfEstate(pId: Int): List<Image>
 
