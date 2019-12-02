@@ -17,4 +17,10 @@
         android:icon="@android:drawable/ic_dialog_map"
         />
 
+    <item
+        android:id="@+id/tool_simulate"
+        android:title="@string/toolbar_simulate"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_help"/>
+
 </menu>

@@ -43,4 +43,10 @@ public class ExampleUnitTest {
 
         assertEquals(exemple,toTest);
     }
+
+    @Test
+    public void powerTest(){
+        double result = Math.pow(2.0,2.0);
+        assertEquals(4.0,result,0.0);
+    }
 }

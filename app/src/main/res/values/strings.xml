@@ -56,8 +56,22 @@ It long just to have make the body of this screen properly.</string>
 
     <string name="toolbar_search">search</string>
     <string name="toolbar_map">map</string>
+    <string name="toolbar_simulate">mortgage simulator</string>
 
     <string name="title_activity_edit">where are you?</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="mg_title">Mortgage Simulator</string>
+    <string name="mg_mortgage_title">Mortgage Value</string>
+    <string name="mg_mortgage_base">0</string>
+    <string name="mg_interest_title">Interest rate</string>
+    <string name="mg_interest_base">0</string>
+    <string name="mg_interest_percent">%</string>
+    <string name="mg_contribution_title">Contribution</string>
+    <string name="mg_contribution_base">0</string>
+    <string name="mg_duration_title">Duration</string>
+    <string name="mg_duration_base">0</string>
+    <string name="mg_duration_unit">Month</string>
+    <string name="mg_button">calculate</string>
+    <string name="mg_result">Minimal payment per month</string>
 </resources>

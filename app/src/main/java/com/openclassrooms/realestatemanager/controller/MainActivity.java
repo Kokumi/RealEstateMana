@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
                 Intent mapIntent = new Intent(this,MapsActivity.class);
                 startActivity(mapIntent);
                 break;
+            case R.id.tool_simulate:
+                Intent simulatorIntent = new Intent(this,MortgageActivity.class);
+                startActivity(simulatorIntent);
         }
 
         return super.onOptionsItemSelected(item);
