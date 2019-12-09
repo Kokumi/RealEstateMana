@@ -3,20 +3,25 @@ package com.openclassrooms.realestatemanager.controller
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.widget.*
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Entity.*
 import kotlinx.android.synthetic.main.activity_edit.*
-import java.io.File
+import java.io.*
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Collections.list
 import kotlin.collections.ArrayList
 
 class EditActivity : AppCompatActivity(), ImageTaskRecepter {
@@ -111,7 +116,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
             if(realEstateData != null) {
                 //val imageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 val imageIntent = Intent()
-                imageIntent.type = "*/*"
+                imageIntent.type = "image/*"
                 imageIntent.action = Intent.ACTION_GET_CONTENT
                 startActivityForResult(Intent.createChooser(imageIntent,"Select Image"),gallery)
                 //startActivityForResult(imageIntent, gallery)
@@ -184,11 +189,44 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         if(resultCode != Activity.RESULT_CANCELED && requestCode == gallery){
             if(data!=null){
                 if(realEstateData!= null) {
-                    val file = File(data.data!!.path).extension
+                    val imageDirectory = File(Environment.getExternalStorageDirectory().toString() + "/realEstate/Images")
+                    println(imageDirectory.path)
+                    if(!imageDirectory.exists()) imageDirectory.mkdirs()
+
+                    val file = File("${data.data!!.path}.jpg")
                     println(file)
-                    val contentURI = data.data
-                    val task = AddImageTask(this.baseContext)
-                    task.execute(Image(realEstateData!!.id, contentURI!!.toString()))
+                    val outputFile = File(imageDirectory,file.name)
+
+                    try{
+                        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, data.data)
+
+                        val bytes = ByteArrayOutputStream()
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,90,bytes)
+                        outputFile.createNewFile()
+
+                        //val fis = FileInputStream(data.data!!.path)
+                        val fos = FileOutputStream(outputFile)
+
+                        fos.write(bytes.toByteArray())
+                        MediaScannerConnection.scanFile(this,
+                                arrayOf(outputFile.path),
+                                arrayOf("image/jpeg"),null)
+                        fos.close()
+
+                        /*fis.copyTo(fos, DEFAULT_BUFFER_SIZE)
+                        fis.close()
+                        fos.flush()
+                        fos.close()*/
+
+                        val contentURI = outputFile.path
+
+
+                        val task = AddImageTask(this.baseContext)
+                        task.execute(Image(realEstateData!!.id, contentURI!!.toString()))
+                    }catch (e : Exception){
+                        e.printStackTrace()
+                    }
+                    //val contentURI = data.data!!.path
                 }
             }
         }

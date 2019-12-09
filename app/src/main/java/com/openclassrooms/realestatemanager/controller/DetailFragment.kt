@@ -40,7 +40,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
     override fun imageFinish(imagesOutput: ArrayList<Image>) {
 
-        val mAdapter = FragmentMediaAdapter(imagesOutput,this.context!!)
+        val mAdapter = FragmentMediaAdapter(imagesOutput)
         val recyclerView = mView!!.findViewById(R.id.fragment_media) as RecyclerView
         val llm = LinearLayoutManager(this.context)
         llm.orientation = LinearLayoutManager.HORIZONTAL
@@ -82,8 +82,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
         mView = view
         // Inflate the layout for this fragment
-        display(view)
-        buttonConfig(view)
+
 
         if(realEstateData != null) {
             val imageTask = ImageTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
@@ -92,7 +91,8 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         }
 
         // AIzaSyACRApsQtNqJSIupQcUST_jmv-5TbDTBQM
-
+        display(view)
+        buttonConfig(view)
 
         return view
     }

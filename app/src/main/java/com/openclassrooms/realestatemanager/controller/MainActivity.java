@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.controller;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
     RealEstateAdapter mAdapter;
     ArrayList<RealEstate> mData = new ArrayList<>();
 
-
     ArrayList<RealEstate> searchResult;
 
     @Override
@@ -56,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+        //}
+
 
         GetDataTask task = new GetDataTask();
         try {
