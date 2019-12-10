@@ -40,7 +40,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
     override fun imageFinish(imagesOutput: ArrayList<Image>) {
 
-        val mAdapter = FragmentMediaAdapter(imagesOutput)
+        val mAdapter = FragmentMediaAdapter(imagesOutput, this.context!!)
         val recyclerView = mView!!.findViewById(R.id.fragment_media) as RecyclerView
         val llm = LinearLayoutManager(this.context)
         llm.orientation = LinearLayoutManager.HORIZONTAL
