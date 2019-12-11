@@ -38,6 +38,9 @@ class DetailFragment : Fragment(), AsyncImageOutput {
     private var mView : View? = null
 
 
+    /**
+     * get image from task
+     */
     override fun imageFinish(imagesOutput: ArrayList<Image>) {
 
         val mAdapter = FragmentMediaAdapter(imagesOutput, this.context!!)
@@ -48,6 +51,9 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         recyclerView.adapter =mAdapter
     }
 
+    /**
+     * get interest from task
+     */
     override fun interestFinish(interestOutput: ArrayList<Interess>) {
         val interestText = mView!!.findViewById<TextView>(R.id.fragment_Interest_text)
         interestText.text = if(interestOutput.size == 0) "nothing" else ""
@@ -59,6 +65,9 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
     }
 
+    /**
+     * get map from task
+     */
     override fun mapFinish(mapOutput: Bitmap) {
         if(mView != null) {
             val mapImage = mView!!.findViewById(R.id.fragment_map) as ImageView
@@ -66,6 +75,9 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         }
     }
 
+    /**
+     * get all data from adapter
+     */
     companion object{
         fun newInstance(pRealEstate: RealEstate?, pPrice: Price, pAddress: Address,pAgent: Agent) = DetailFragment().apply{
             realEstateData = pRealEstate
@@ -75,8 +87,9 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         }
     }
 
-    //private val extraRealEstate = "RealEstate"
-
+    /**
+     * fragment's view function
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
@@ -85,6 +98,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
 
         if(realEstateData != null) {
+            // launch task for image
             val imageTask = ImageTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
             imageTask.delegate = this
             imageTask.execute(realEstateData!!.id)
@@ -97,6 +111,9 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         return view
     }
 
+    /**
+     * display all in the view
+     */
     private fun display( pView: View){
         val warningLayout = pView.findViewById(R.id.fragment_warning_layout) as FrameLayout
         val descriptionText = pView.findViewById(R.id.fragment_description_text) as TextView
@@ -109,7 +126,8 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         val dateVenteText = pView.findViewById(R.id.fragment_date_vente_text) as TextView
         val agentText = pView.findViewById(R.id.fragment_agent_text) as TextView
 
-        if(realEstateData != null){
+
+        if(realEstateData != null){                     //if an item has been selected in the adapter
             warningLayout.visibility = View.GONE
             descriptionText.text = realEstateData!!.description
 
@@ -128,11 +146,12 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
             agentText.text = agentData!!.name
 
+            // launch interest task
             val interestTask = InterestTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
             interestTask.delegate = this
             interestTask.execute(realEstateData!!.Interess)
 
-
+            // launch static map task
             val addressConverted = addressUrlConverter()
             val url = URL("https://maps.googleapis.com/maps/api/staticmap" +
                     "?center=$addressConverted"+
@@ -144,10 +163,14 @@ class DetailFragment : Fragment(), AsyncImageOutput {
             mapTask.execute(url)
 
         }else{
+            // if no item has been selected
             warningLayout.visibility = View.VISIBLE
         }
     }
 
+    /**
+     * convert address object to url-like address for map
+     */
     private fun addressUrlConverter(): String{
         var converted = ""
         val toConvert = "${addressData!!.address},${addressData!!.city},${addressData!!.country}"
@@ -160,10 +183,14 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         return converted
     }
 
+    /**
+     * configuration of all button
+     */
     private fun buttonConfig(pView: View){
         val editButton = pView.findViewById(R.id.fragment_edit_button) as Button
         val createButton = pView.findViewById(R.id.fragment_edit_new) as Button
 
+        // button to edit selected real estate
         editButton.setOnClickListener{
             val intent = Intent(context,EditActivity::class.java)
             intent.putExtra("SELECTION",realEstateData)
@@ -172,6 +199,7 @@ class DetailFragment : Fragment(), AsyncImageOutput {
             intent.putExtra("SELECTION_AGENT",agentData)
             startActivity(intent)
         }
+        // button to create new one
         createButton.setOnClickListener{
             val intent = Intent(context, EditActivity::class.java)
             startActivity(intent)
@@ -179,8 +207,10 @@ class DetailFragment : Fragment(), AsyncImageOutput {
     }
 
 
-
-class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int, Void, ArrayList<Image>>(){
+    /**
+     * task for get real estate's image
+     */
+    class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int, Void, ArrayList<Image>>(){
         var delegate : AsyncImageOutput? = null
         override fun onPostExecute(result: ArrayList<Image>?) {
             if(result != null) delegate!!.imageFinish(result)
@@ -193,12 +223,6 @@ class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int, Void, Array
         override fun doInBackground(vararg p0: Int?): ArrayList<Image>? {
             if(p0[0] != null){
 
-                /*val bitmapArray = ArrayList<Bitmap>()
-                for(image in imageData) {
-                    val bitmapObject = MediaStore.Images.Media.getBitmap(pContext.contentResolver, Uri.parse(image.Uri))
-                    bitmapArray.add(bitmapObject)
-                }*/
-
                 return pDatabase.realEstateDao().getImageOfEstate(p0[0] as Int) as ArrayList<Image>
             } else {
                 return null
@@ -206,6 +230,9 @@ class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int, Void, Array
         }
     }
 
+    /**
+     * task for get real estate's interest
+     */
     class InterestTask(private val pDatabase: AppDatabase) :AsyncTask<String,Void,ArrayList<Interess>>(){
         var delegate : AsyncImageOutput? = null
         override fun onPostExecute(result: ArrayList<Interess>) {
@@ -230,6 +257,9 @@ class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int, Void, Array
         }
     }
 
+    /**
+     * task to get static map
+     */
     class MapAsyncTask : AsyncTask<URL,Void,Bitmap>(){
         var delegate : AsyncImageOutput? = null
 

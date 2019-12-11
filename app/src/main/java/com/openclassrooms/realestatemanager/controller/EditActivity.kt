@@ -21,7 +21,6 @@ import java.lang.Exception
 import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.Collections.list
 import kotlin.collections.ArrayList
 
 class EditActivity : AppCompatActivity(), ImageTaskRecepter {
@@ -34,10 +33,12 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
 
     private var nbImageText : TextView? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
+        // get real estate's data from fragment
         realEstateData = if(intent.extras?.get("SELECTION") != null) intent.extras?.get("SELECTION") as RealEstate
         else null
         priceData = if(intent.extras?.get("SELECTION_PRICE") != null) intent.extras?.get("SELECTION_PRICE") as Price
@@ -53,16 +54,25 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         display()
     }
 
+    /**
+     * get image from task
+     */
     override fun imageRecepter(pImageData: ArrayList<Image>) {
         nbImageText!!.text = StringBuilder(getString(R.string.edit_number_image) + pImageData.size)
     }
 
+    /**
+     * get interest from task
+     */
     override fun interestAdder(pId: Long) {
         if(pId.toInt() != 0){
             realEstateData!!.Interess = "${realEstateData!!.Interess}${pId.toInt()}\n"
         }
     }
 
+    /**
+     * show everything in view
+     */
     private fun display(){
         val rED = realEstateData
         val pD = priceData
@@ -88,7 +98,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
 
         spinnerConfiguration(editStatus)
 
-        if(realEstateData != null){
+        if(realEstateData != null){                 //if it's an edit of existing real estate
 
             editPrice.setText(pD!!.value.toString())
             switchPriceType.isChecked = pD.isDollar
@@ -108,24 +118,23 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
             imageTask.delegate = this
             imageTask.execute(realEstateData!!.id)
         } else{
+            // if it's create new real estate
             edit_image_number.text = StringBuilder(R.string.edit_number_image.toString() + "0")
         }
 
-
+        // add image to existing real estate
         imageButton.setOnClickListener{
             if(realEstateData != null) {
-                //val imageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 val imageIntent = Intent()
                 imageIntent.type = "image/*"
                 imageIntent.action = Intent.ACTION_GET_CONTENT
                 startActivityForResult(Intent.createChooser(imageIntent,"Select Image"),gallery)
-                //startActivityForResult(imageIntent, gallery)
             }
             else{
                 Toast.makeText(this, "Real estate doesn't exist!",Toast.LENGTH_SHORT).show() }
         }
 
-
+        // add interest to existing real estate
         buttonInterest.setOnClickListener{
             if(realEstateData != null) {
                 val interestTask = AddInterestTask(this)
@@ -137,11 +146,13 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
 
 
-
+        // save button
         finishButton.setOnClickListener{
 
             val todayDay = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(Date())
             if(priceData == null && realEstateData == null && addressData == null && agentData == null){
+                // create new real estate
+
                 priceData = Price(value = if (editPrice.text != null) Integer.parseInt(editPrice.text.toString()) else 0,
                         isDollar = switchPriceType.isChecked)
 
@@ -163,6 +174,8 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
 
                 agentData = Agent(name= if(editAgent.text != null) editAgent.text.toString() else "")
             }else{
+                // update real estate
+
                 priceData!!.value = if(editPrice.text != null) Integer.parseInt( editPrice.text.toString()) else 0
                 priceData!!.isDollar = switchPriceType.isChecked
                 addressData!!.address = if(editAddress.text != null) editAddress.text.toString() else ""
@@ -185,26 +198,33 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
     }
 
+    /**
+     * save selected image
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode != Activity.RESULT_CANCELED && requestCode == gallery){
             if(data!=null){
                 if(realEstateData!= null) {
+
+                    // create directory if doesn't exist
                     val imageDirectory = File(Environment.getExternalStorageDirectory().toString() + "/realEstate/Images")
                     println(imageDirectory.path)
                     if(!imageDirectory.exists()) imageDirectory.mkdirs()
 
+                    // add name of the new file
                     val file = File("${data.data!!.path}.jpg")
                     println(file)
                     val outputFile = File(imageDirectory,file.name)
 
                     try{
+                        // get selected image in bitmap
                         val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, data.data)
 
                         val bytes = ByteArrayOutputStream()
                         bitmap.compress(Bitmap.CompressFormat.JPEG,90,bytes)
                         outputFile.createNewFile()
 
-                        //val fis = FileInputStream(data.data!!.path)
+                        // save new file
                         val fos = FileOutputStream(outputFile)
 
                         fos.write(bytes.toByteArray())
@@ -212,11 +232,6 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
                                 arrayOf(outputFile.path),
                                 arrayOf("image/jpeg"),null)
                         fos.close()
-
-                        /*fis.copyTo(fos, DEFAULT_BUFFER_SIZE)
-                        fis.close()
-                        fos.flush()
-                        fos.close()*/
 
                         val contentURI = outputFile.path
 
@@ -233,6 +248,9 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    /**
+     * configuration of the state spinner
+     */
     private fun spinnerConfiguration(pSpinner: Spinner){
         val typeItem = arrayOf("Not Ready", "On sale", "Sold")
         val dropAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, typeItem)
@@ -253,6 +271,9 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
     }
 
+    /**
+     * task to update existing real estate
+     */
     class SaveEditTask(private val pPrice: Price, private val pRealEstate: RealEstate,
                        private val pAddress: Address, private val pAgent: Agent,
                        private val pContext : Context, private val pExisting : Boolean)
@@ -283,6 +304,10 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
             }
         }
     }
+
+    /**
+     * task to get image
+     */
     class ImageTask(private val pDatabase : AppDatabase) : AsyncTask<Int,Void,ArrayList<Image>>(){
         var delegate : ImageTaskRecepter? = null
 
@@ -297,7 +322,9 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
     }
 
-
+    /**
+     * task to save image's url
+     */
     class AddImageTask(private val pContext: Context) : AsyncTask<Image,Void,Boolean>(){
 
         override fun onPostExecute(result: Boolean) {
@@ -318,6 +345,9 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
     }
 
+    /**
+     * task to add interest
+     */
     class AddInterestTask(private val pContext: Context) : AsyncTask<Interess,Void,Long>(){
         var delegate : ImageTaskRecepter? = null
 

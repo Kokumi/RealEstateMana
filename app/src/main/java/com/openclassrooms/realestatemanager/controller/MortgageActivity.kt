@@ -32,6 +32,7 @@ class MortgageActivity : AppCompatActivity() {
             moneySwitch.text = if(moneySwitch.isChecked) "€" else "$"
             moneyUnit = if(moneySwitch.isChecked) "€" else "$"
         }
+        // launch mortgage calculation
         validButton.setOnClickListener {
             val percentInteress = "1.${interestEdit.text}"
             calculation(if(mortgageEdit.text.toString() != "") mortgageEdit.text.toString().toInt() else 0,
@@ -41,6 +42,9 @@ class MortgageActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * to calculation the mortgage
+     */
     private fun calculation(pMortgage : Int, pInterest : Double, pContribution: Int, pDuration : Int){
         val resultText = findViewById<TextView>(R.id.mg_result)
         val format = DecimalFormat("#.##")

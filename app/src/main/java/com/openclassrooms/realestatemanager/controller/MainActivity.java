@@ -42,28 +42,31 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
 
     ArrayList<RealEstate> searchResult;
 
+    /**
+     * show result of research to real estate adapter
+     * @param pRealEstate result of research
+     */
     @Override
     public void positiveResult(RealEstate pRealEstate) {
         searchResult.add(pRealEstate);
         configureAdapter(searchResult);
     }
 
-    @Override
-    public void negativeResult() {
-        configureAdapter(searchResult);
-    }
-
+    /**
+     * activity creation function
+     * @param savedInstanceState bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
+
+        ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-        //}
 
 
+        // get all saved realEstate
         GetDataTask task = new GetDataTask();
         try {
             mData = task.execute().get();
@@ -86,6 +89,10 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         this.textViewQuantity.setText(String.valueOf(quantity)); testa mdp: 17
     }*/
 
+    /**
+     * configuration of the real estate adapter
+     * @param pData real estates list to show
+     */
     private void configureAdapter(List<RealEstate> pData){
 
         mAdapter = new RealEstateAdapter(pData,this);
@@ -94,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         recyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * configuration of the fragment
+     */
     private void configureFragment(){
         FragmentTransaction fT = getSupportFragmentManager().beginTransaction();
         DetailFragment fragment = new DetailFragment();
@@ -101,6 +111,11 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         fT.commit();
     }
 
+    /**
+     * configuration of the toolbar
+     * @param menu menu of the toolbar
+     * @return always true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar,menu);
@@ -108,6 +123,11 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         return true;
     }
 
+    /**
+     * configuration of toolbar button
+     * @param item selected button
+     * @return always true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -127,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * show search window
+     */
     private void showDialog(){
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -165,6 +188,11 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         dialog.show();
     }
 
+    /**
+     * launch task for search
+     * @param filter search parameter
+     * @param filterType type of the search parameter
+     */
     private void setFilter(String filter , String filterType){
         searchResult = new ArrayList<>();
         SearchAsyncTask task;
@@ -183,7 +211,9 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         configureAdapter(searchResult);
     }
 
-
+    /**
+     * task to take all real estates
+     */
     class GetDataTask extends AsyncTask<Context, Void, ArrayList<RealEstate>>{
         @Override
         protected void onPostExecute(ArrayList<RealEstate> realEstates) {
@@ -200,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
         }
     }
 
+    /**
+     * task to search real estate according parameters
+     */
     class SearchAsyncTask extends AsyncTask<RealEstate, Void, Object>{
         SearchAsyncResponse delegate;
         String mFilter, mFilterType;
@@ -251,5 +284,4 @@ public class MainActivity extends AppCompatActivity implements SearchAsyncRespon
 }
 interface SearchAsyncResponse{
         void positiveResult(RealEstate pRealEstate);
-        void negativeResult();
 }

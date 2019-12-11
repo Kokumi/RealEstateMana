@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.model.Entity.Image
 import com.openclassrooms.realestatemanager.R
@@ -37,11 +36,12 @@ class FragmentMediaAdapter(private val pData: ArrayList<Image>,private val pCont
 
         private val imageView : ImageView = cellView.findViewById(R.id.media_cell_image)
 
+        /**
+         * display images
+         */
         fun display(pImage: Uri, pContext : Context){
             println("image url: ${pImage.path}")
-            val bitmap = BitmapFactory.decodeFile(pImage.path)
             imageView.setImageBitmap(BitmapFactory.decodeFile(pImage.path))
-            //imageView.setImageBitmap(bitmap)
 
             imageView.setOnClickListener{
                 val intent = Intent(pContext,MediaImageActivity::class.java)

@@ -17,7 +17,7 @@ class MediaImageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_image)
 
-
+        // get selected image from intent
         mBitmap = if(intent.extras?.get("IMAGE") != null) BitmapFactory.decodeFile(intent.extras?.get("IMAGE") as String)
         else null
 

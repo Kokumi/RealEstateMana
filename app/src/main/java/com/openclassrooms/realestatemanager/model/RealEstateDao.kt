@@ -50,6 +50,9 @@ interface RealEstateDao {
     @Insert
     fun insertAgent(pAgent : Agent) : Long
 
+    /**
+     * insert new real estate with all data
+     */
     @Transaction
     fun insertNewRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address, pAgent: Agent){
         val priceId = insertPrice(pPrice)
@@ -74,6 +77,9 @@ interface RealEstateDao {
     @Update
     fun updateEstate(pRealEstate: RealEstate)
 
+    /**
+     * update all data of real estate
+     */
     @Transaction
     fun updateRealEstate(pRealEstate: RealEstate, pPrice: Price, pAddress: Address, pAgent: Agent){
         val priceId = updatePrice(pPrice)

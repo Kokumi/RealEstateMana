@@ -33,14 +33,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, AsyncAddress {
     private var mLocationPermissionGranted = false
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private var mLastKnowLocation: Location? = null
-    //private val mContext : Context? = null
     private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 14
 
 
+    /**
+     * get real estate's address nearby user
+     */
     override fun processFinish(addressOutput: ArrayList<Address>) {
         displayMarker(addressOutput)
     }
 
+    /**
+     * activity creation function
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -52,26 +57,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, AsyncAddress {
         mapFragment.getMapAsync(this)
     }
 
-
+    /**
+     * configure google map
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
         updateLocationUI()
         getDeviceLocation()
-        /*// Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        //mMap.addMarker(MarkerOptions().po)
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))*/
     }
 
     /**
      * configure map according to location permission
      */
     private fun updateLocationUI() {
-        if (mMap == null) {
-            return
-        }
         try {
             if (mLocationPermissionGranted) {
                 mMap.isMyLocationEnabled = true
@@ -167,6 +166,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, AsyncAddress {
         }
     }
 
+    /**
+     * task to get real estate's address
+     */
     class AddressTask( private val pDatabase: AppDatabase) : AsyncTask<Void, Void, ArrayList<Address>>(){
         var delegate : AsyncAddress? = null
 

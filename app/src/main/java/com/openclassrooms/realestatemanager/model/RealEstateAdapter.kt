@@ -13,7 +13,6 @@ import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.controller.DetailFragment
 import com.openclassrooms.realestatemanager.model.Entity.*
-import java.io.File
 import java.lang.StringBuilder
 import kotlin.collections.ArrayList
 
@@ -25,10 +24,10 @@ class RealEstateAdapter(pData : List<RealEstate>,
                         private val pActivity: AppCompatActivity)
     :  RecyclerView.Adapter<RealEstateAdapter.ViewHolder>(){
 
-
     private var mData : List<RealEstate> = pData
     private var mPriceData : ArrayList<Price> = ArrayList()
     private var mAddressData = ArrayList<Address>()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.real_estate_cell, parent, false) as View
@@ -56,21 +55,32 @@ class RealEstateAdapter(pData : List<RealEstate>,
         private var mAddress : Address? = null
         private var mAgent : Agent? = null
 
+        /**
+         * get address and/or Price from task
+         */
         override fun processFinish(priceOutput: Price?, addressOutput : Address?) {
             if(priceOutput != null){ priceDisplay(priceOutput) ; pParent.mPriceData.add(priceOutput)}
 
             if(addressOutput != null) {addressDisplay(addressOutput) ; pParent.mAddressData.add(addressOutput)}
         }
 
+        /**
+         * get image from task
+         */
         override fun imageFinish(imageOutput: Image) {
-            val file = File(Uri.parse(imageOutput.Uri).path)
             imageView.setImageURI(Uri.parse(imageOutput.Uri))
         }
 
+        /**
+         * get agent from task
+         */
         override fun agentFinish(agentOutput: Agent) {
             mAgent= agentOutput
         }
 
+        /**
+         * display all real estates
+         */
         fun display(pRealEstate: RealEstate, pActivity: AppCompatActivity){
             typeView.text = pRealEstate.type
 
@@ -99,18 +109,27 @@ class RealEstateAdapter(pData : List<RealEstate>,
             }
         }
 
+        /**
+         * display real estate's price
+         */
         private fun priceDisplay(pPrice : Price?){
             priceView.text = if(pPrice != null) StringBuilder( pPrice.value.toString() + " "
             + if(pPrice.isDollar) "$" else "€") else "not Found"
             mPrice = pPrice
         }
 
+        /**
+         * display real estate's address
+         */
         private fun addressDisplay(pAddress: Address){
             cityView.text = pAddress.city
             mAddress = pAddress
         }
     }
 
+    /**
+     * task to get real estate's price
+     */
     class PriceTask( private val pDatabase : AppDatabase) : AsyncTask<Int,Void, Price>(){
         var delegate : AsyncResponse? = null
 
@@ -128,6 +147,9 @@ class RealEstateAdapter(pData : List<RealEstate>,
         }
     }
 
+    /**
+     * task to get real estate's address
+     */
     class AddressTask( private val pDatabase: AppDatabase) : AsyncTask<Int,Void, Address>(){
         var delegate : AsyncResponse? = null
 
@@ -144,6 +166,9 @@ class RealEstateAdapter(pData : List<RealEstate>,
         }
     }
 
+    /**
+     * task to get real estate's image
+     */
     class ImageTask(private val pDatabase: AppDatabase) : AsyncTask<Int,Void, Image>(){
         var delegate : AsyncResponse? = null
         override fun onPostExecute(result: Image?) {
@@ -163,6 +188,9 @@ class RealEstateAdapter(pData : List<RealEstate>,
         }
     }
 
+    /**
+     * task to get real estate's agent
+     */
     class AgentTask(private val pDatabase: AppDatabase) : AsyncTask<Int,Void, Agent>(){
         var delegate : AsyncResponse? = null
         override fun onPostExecute(result: Agent?) {
