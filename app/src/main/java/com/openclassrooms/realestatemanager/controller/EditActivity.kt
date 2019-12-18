@@ -280,6 +280,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         : AsyncTask<Void,Void,Boolean>(){
         override fun onPostExecute(result: Boolean) {
             if(result){
+                Toast.makeText(pContext,"save complete",Toast.LENGTH_LONG).show()
                 val intent = Intent(pContext, MainActivity::class.java)
                 pContext.startActivity(intent)
             }else{
