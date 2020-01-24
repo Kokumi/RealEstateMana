@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.model.Entity
 
+import android.content.ContentValues
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -18,5 +19,18 @@ import java.net.URI
                         childColumns = arrayOf("id"))
                 )
         )
-class Image( val id : Int,
-            @PrimaryKey val Uri : String)
+class Image( var id : Int ,
+            @PrimaryKey var Uri : String ){
+
+
+
+    fun fromContentValues(pValues : ContentValues) : Image{
+        var iId = 0
+        var iUri = ""
+
+        if(pValues.containsKey("id")){ iId=pValues.getAsString("id").toInt() }
+        if(pValues.containsKey("uri")){ iUri =pValues.getAsString("uri")}
+
+        return Image(iId,iUri)
+
+}}

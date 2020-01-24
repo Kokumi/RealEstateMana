@@ -56,6 +56,12 @@
         </activity>
 
         <activity android:name=".controller.DetailFragment" />
+
+
+        <provider
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:name=".model.contentProvider.ItemContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

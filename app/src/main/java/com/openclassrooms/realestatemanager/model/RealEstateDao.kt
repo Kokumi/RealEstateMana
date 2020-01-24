@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.model
 
+import android.database.Cursor
 import androidx.room.*
 import com.openclassrooms.realestatemanager.model.Entity.*
 
@@ -35,6 +36,12 @@ interface RealEstateDao {
     @Query("SELECT * FROM Interess WHERE id== (:pId)")
     fun getInteressByID(pId: Int): Interess
 
+    @Query("SELECT * FROM RealEstate WHERE id== (:pId)")
+    fun getRealEstateWithCursor(pId: Long) : Cursor
+
+    @Query("SELECT * FROM Image WHERE id== (:pId)")
+    fun getImageWithCursor(pId : Long) : Cursor
+
     @Insert
     fun insertEstate(realEstates : RealEstate)
 
@@ -46,6 +53,9 @@ interface RealEstateDao {
 
     @Insert
     fun insertImage(pImage: Image)
+
+    @Insert
+    fun insertImageWReturn(pImage: Image) : Long
 
     @Insert
     fun insertAgent(pAgent : Agent) : Long
@@ -92,4 +102,6 @@ interface RealEstateDao {
         updateEstate(pRealEstate)
     }
 
+    @Delete
+    fun deleteImage(pId: Int) : Int
 }

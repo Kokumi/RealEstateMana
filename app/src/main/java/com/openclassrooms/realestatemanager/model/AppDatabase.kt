@@ -13,6 +13,8 @@ import com.openclassrooms.realestatemanager.model.Entity.*
 abstract class AppDatabase : RoomDatabase() {
     abstract fun realEstateDao(): RealEstateDao
 
+    var INSTANCE : AppDatabase? = null
+
     fun getDatabase(pContext: Context): AppDatabase?{
         var INSTANCE : AppDatabase? = null
         if(INSTANCE == null){

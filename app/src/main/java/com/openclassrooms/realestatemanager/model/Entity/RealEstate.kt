@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.model.Entity
 
+import android.content.ContentValues
 import android.graphics.Bitmap
 import androidx.room.*
 import java.io.Serializable
@@ -35,4 +36,21 @@ data class RealEstate(@PrimaryKey(autoGenerate = true) val id: Int = 0,
                       @ColumnInfo(name="addressId") var addressId : Int =0,
                       @ColumnInfo(name="agentId") var agentId : Int = 0,
                       @ColumnInfo(name="priceId") var priceId : Int = 0
-                      ) : Serializable
+                      ) : Serializable{
+
+    fun fromContentValues(pValues : ContentValues) : RealEstate{
+        val item = RealEstate()
+
+        if(pValues.containsKey("type")) item.type =pValues.getAsString("type")
+        if(pValues.containsKey("surface")) item.surface =pValues.getAsString("surface").toInt()
+        if(pValues.containsKey("room")) item.room = pValues.getAsString("room").toInt()
+        if(pValues.containsKey("description")) item.description = pValues.getAsString("description")
+        if(pValues.containsKey("statut")) item.statut = pValues.getAsString("statut")
+        if(pValues.containsKey("interess")) item.Interess = pValues.getAsString("interess")
+        if(pValues.containsKey("dateEntree")) item.dateEntree = pValues.getAsString("dateEntree")
+        if(pValues.containsKey("dateVente")) item.dateVente = pValues.getAsString("dateVente")
+
+        return item
+    }
+
+}
