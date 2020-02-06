@@ -1,27 +1,28 @@
 package com.openclassrooms.realestatemanager.controller
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Entity.*
 import kotlinx.android.synthetic.main.activity_edit.*
-import java.io.*
-import java.lang.Exception
-import java.lang.StringBuilder
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class EditActivity : AppCompatActivity(), ImageTaskRecepter {
     private var realEstateData : RealEstate? = null
@@ -335,14 +336,23 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
 
         override fun doInBackground(vararg p0: Image): Boolean {
-            val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
-            try {
-                db.realEstateDao().insertImage(p0[0])
-                return true
-            }catch(e : Exception){
-                e.printStackTrace()
-                return false
-            }
+            /* val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
+             val contentResolver = pContext.contentResolver
+             val contentValues = ContentValues()
+             contentValues.put("id",p0[0].id)
+             contentValues.put("uri",p0[0].Uri)
+             try {
+                 contentResolver.insert(
+                         Uri.parse("content://com.openclassrooms.realestatemanager.provider/" + Image::class.java.simpleName),
+                         contentValues)
+
+                 db.realEstateDao().insertImage(p0[0])
+                 return true
+             }catch(e : Exception){
+                 e.printStackTrace()
+                 return false
+             }*/
+            return false
         }
     }
 

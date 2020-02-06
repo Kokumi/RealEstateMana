@@ -9,6 +9,6 @@ import androidx.room.Query
  */
 @Dao
 interface ItemDao {
-    @Query("Select * From RealEstate Where id == :pId ")
-    fun getItemWithCursor(pId : Int) : Cursor
+    //@Query("Select * From RealEstate Where id == :pId ")
+    //fun getItemWithCursor(pId : Int) : Cursor
 }

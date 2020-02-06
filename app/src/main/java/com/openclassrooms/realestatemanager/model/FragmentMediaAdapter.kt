@@ -1,7 +1,9 @@
 package com.openclassrooms.realestatemanager.model
 
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.LayoutInflater
@@ -29,7 +31,12 @@ class FragmentMediaAdapter(private val pData: ArrayList<Image>,private val pCont
     override fun getItemCount() = pData.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.display(Uri.parse(pData[position].Uri),pContext)
+        //final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(
+        //                Uri.parse("content://com.openclassrooms.realestatemanager.provider/"+ Image.class.getSimpleName()), USER_ID),
+        //                null,null,null,null);
+
+
+        //holder.display(pData[position].id,pContext)
     }
 
     class ViewHolder(cellView: View) : RecyclerView.ViewHolder(cellView){
@@ -39,15 +46,22 @@ class FragmentMediaAdapter(private val pData: ArrayList<Image>,private val pCont
         /**
          * display images
          */
-        fun display(pImage: Uri, pContext : Context){
-            println("image url: ${pImage.path}")
-            imageView.setImageBitmap(BitmapFactory.decodeFile(pImage.path))
+        fun display(pImage: Int, pContext : Context){
+            /*val contentResolver = pContext.contentResolver
+            val cursor : Cursor = contentResolver.query(ContentUris.withAppendedId(
+                    Uri.parse("content://com.openclassrooms.realestatemanager.provider/+ ${Image::class.simpleName}"),1),
+            null,null,null,null)!!
+            val imageUrl = Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow("uri")))
+
+            println("image url: $imageUrl")
+
+
+            imageView.setImageBitmap(BitmapFactory.decodeFile(imageUrl.path))
 
             imageView.setOnClickListener{
                 val intent = Intent(pContext,MediaImageActivity::class.java)
-                intent.putExtra("IMAGE",pImage.path)
-                pContext.startActivity(intent)
-            }
+                intent.putExtra("IMAGE",imageUrl.path)
+                pContext.startActivity(intent)}*/
         }
     }
 }

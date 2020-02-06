@@ -222,7 +222,6 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
         override fun doInBackground(vararg p0: Int?): ArrayList<Image>? {
             if(p0[0] != null){
-
                 return pDatabase.realEstateDao().getImageOfEstate(p0[0] as Int) as ArrayList<Image>
             } else {
                 return null

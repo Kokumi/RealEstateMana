@@ -23,6 +23,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <uses-library android:name="android.test.runner"/>
+
+
         <activity android:name=".controller.MediaImageActivity"></activity>
         <activity android:name=".controller.MortgageActivity" />
         <!--
@@ -62,6 +65,7 @@
             android:authorities="com.openclassrooms.realestatemanager.provider"
             android:name=".model.contentProvider.ItemContentProvider"
             android:exported="true"/>
+
     </application>
 
 </manifest>
