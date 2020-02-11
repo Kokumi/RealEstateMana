@@ -336,7 +336,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
         }
 
         override fun doInBackground(vararg p0: Image): Boolean {
-            /* val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
+             val db = Room.databaseBuilder(pContext,AppDatabase::class.java,"database").build()
              val contentResolver = pContext.contentResolver
              val contentValues = ContentValues()
              contentValues.put("id",p0[0].id)
@@ -351,8 +351,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
              }catch(e : Exception){
                  e.printStackTrace()
                  return false
-             }*/
-            return false
+             }
         }
     }
 

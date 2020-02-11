@@ -36,11 +36,11 @@ interface RealEstateDao {
     @Query("SELECT * FROM Interess WHERE id== (:pId)")
     fun getInteressByID(pId: Int): Interess
 
-    /*@Query("SELECT * FROM RealEstate WHERE id== (:pId)")
+    @Query("SELECT * FROM RealEstate WHERE id== (:pId)")
     fun getRealEstateWithCursor(pId: Long) : Cursor
 
     @Query("SELECT * FROM Image WHERE id== (:pId)")
-    fun getImageWithCursor(pId : Long) : Cursor*/
+    fun getImageWithCursor(pId : Long) : Cursor
 
     @Insert
     fun insertEstate(realEstates : RealEstate)
@@ -102,6 +102,6 @@ interface RealEstateDao {
         updateEstate(pRealEstate)
     }
 
-    @Delete
-    fun deleteImage(pId: Int) : Int
+   // @Delete
+   // fun deleteImage(pId: Int) : Int
 }

@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Entity.Image
-import com.openclassrooms.realestatemanager.model.Entity.RealEstate
 import java.lang.IllegalArgumentException
 
 /**
@@ -25,21 +24,21 @@ class ItemContentProvider : ContentProvider() {
 
     override fun query(pUri: Uri, projection: Array<String>?, selection: String?, selectionArg: Array<String>?, sortOrder: String?): Cursor? {
 
-        /*if (this.context != null){
+        if (this.context != null){
             val userId : Long = ContentUris.parseId(pUri)
             val db = Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build()
             val cursor = db.realEstateDao().getRealEstateWithCursor(userId)
             cursor.setNotificationUri(context!!.contentResolver, pUri)
 
             return cursor
-        }*/
+        }
 
         throw IllegalArgumentException("Failed to query row for uri $pUri")
     }
 
     override fun insert(pUri: Uri, pContentValues: ContentValues?): Uri? {
 
-        /*if(context != null) {
+        if(context != null) {
             val id : Long = Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build()
                     .realEstateDao().insertImageWReturn(Image(0,"").fromContentValues(pContentValues!!))
 
@@ -47,7 +46,7 @@ class ItemContentProvider : ContentProvider() {
                 context!!.contentResolver.notifyChange(pUri,null)
                 return ContentUris.withAppendedId(pUri,id)
             }
-        }*/
+        }
 
         throw IllegalArgumentException("Failed to insert row into $pUri")
     }
@@ -68,6 +67,6 @@ class ItemContentProvider : ContentProvider() {
     }
 
     override fun getType(p0: Uri): String? {
-        return ""//"vnd.android.cursor.image/$AUTHORITY.$TABLE_NAME"
+        return "vnd.android.cursor.image/$AUTHORITY.$TABLE_NAME"
     }
 }

@@ -36,7 +36,7 @@ class FragmentMediaAdapter(private val pData: ArrayList<Image>,private val pCont
         //                null,null,null,null);
 
 
-        //holder.display(pData[position].id,pContext)
+        holder.display(pData[position].id,pContext)
     }
 
     class ViewHolder(cellView: View) : RecyclerView.ViewHolder(cellView){
@@ -47,9 +47,9 @@ class FragmentMediaAdapter(private val pData: ArrayList<Image>,private val pCont
          * display images
          */
         fun display(pImage: Int, pContext : Context){
-            /*val contentResolver = pContext.contentResolver
+            val contentResolver = pContext.contentResolver
             val cursor : Cursor = contentResolver.query(ContentUris.withAppendedId(
-                    Uri.parse("content://com.openclassrooms.realestatemanager.provider/+ ${Image::class.simpleName}"),1),
+                    Uri.parse("content://com.openclassrooms.realestatemanager.provider/+ ${Image::class.simpleName}"),pImage.toLong()),
             null,null,null,null)!!
             val imageUrl = Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow("uri")))
 
@@ -61,7 +61,10 @@ class FragmentMediaAdapter(private val pData: ArrayList<Image>,private val pCont
             imageView.setOnClickListener{
                 val intent = Intent(pContext,MediaImageActivity::class.java)
                 intent.putExtra("IMAGE",imageUrl.path)
-                pContext.startActivity(intent)}*/
+                pContext.startActivity(intent)}
+
+            //<-android:name=".RealEstateManager"->
+            //multiDexEnable true
         }
     }
 }
