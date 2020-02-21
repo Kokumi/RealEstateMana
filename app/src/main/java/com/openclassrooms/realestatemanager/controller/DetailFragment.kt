@@ -1,9 +1,13 @@
 package com.openclassrooms.realestatemanager.controller
 
 
+import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 
 import android.os.AsyncTask
 import android.os.Bundle
@@ -99,7 +103,8 @@ class DetailFragment : Fragment(), AsyncImageOutput {
 
         if(realEstateData != null) {
             // launch task for image
-            val imageTask = ImageTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
+            //val imageTask = ImageTask(Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build())
+            val imageTask = ImageProviderTask(realEstateData!!.id,context!!)
             imageTask.delegate = this
             imageTask.execute(realEstateData!!.id)
         }
@@ -226,6 +231,53 @@ class DetailFragment : Fragment(), AsyncImageOutput {
             } else {
                 return null
             }
+        }
+    }
+
+    class ImageProviderTask(private val pImage: Int, private val pContext: Context) : AsyncTask<Int,Void, ArrayList<Image>>(){
+        var delegate : AsyncImageOutput? = null
+        override fun onPostExecute(result: ArrayList<Image>?) {
+
+            if(result != null) {
+                delegate!!.imageFinish(result)
+
+            } else{
+                println("image loading error")
+            }
+
+            this.cancel(true)
+
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg p0: Int?): ArrayList<Image>? {
+            val contentResolver = pContext.contentResolver
+            try {
+            val cursor : Cursor = contentResolver.query(ContentUris.withAppendedId(
+                    Uri.parse("content://com.openclassrooms.realestatemanager.provider/+ ${Image::class.simpleName}"),pImage.toLong()),
+                    null,null,null,null)!!
+
+                cursor.moveToPosition(0)
+
+                val result = ArrayList<Image>()
+
+                while(!cursor.isAfterLast){
+                    println("${cursor.position+1} on ${cursor.count}")
+
+                    val image = Image(cursor.getString(cursor.getColumnIndexOrThrow("id")).toInt(),
+                            cursor.getString(cursor.getColumnIndexOrThrow("Uri"))
+                    )
+                    result.add(image)
+                    cursor.moveToNext()
+                }
+
+                cursor.close()
+                return result
+            }catch (e : java.lang.Exception){
+                e.printStackTrace()
+            }
+
+            return null
         }
     }
 

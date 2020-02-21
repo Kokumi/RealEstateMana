@@ -346,7 +346,7 @@ class EditActivity : AppCompatActivity(), ImageTaskRecepter {
                          Uri.parse("content://com.openclassrooms.realestatemanager.provider/" + Image::class.java.simpleName),
                          contentValues)
 
-                 db.realEstateDao().insertImage(p0[0])
+                 //db.realEstateDao().insertImage(p0[0])
                  return true
              }catch(e : Exception){
                  e.printStackTrace()

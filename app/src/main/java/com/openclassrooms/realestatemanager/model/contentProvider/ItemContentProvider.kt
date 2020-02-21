@@ -27,7 +27,7 @@ class ItemContentProvider : ContentProvider() {
         if (this.context != null){
             val userId : Long = ContentUris.parseId(pUri)
             val db = Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build()
-            val cursor = db.realEstateDao().getRealEstateWithCursor(userId)
+            val cursor = db.realEstateDao().getImageWithCursor(userId)
             cursor.setNotificationUri(context!!.contentResolver, pUri)
 
             return cursor
@@ -41,6 +41,8 @@ class ItemContentProvider : ContentProvider() {
         if(context != null) {
             val id : Long = Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build()
                     .realEstateDao().insertImageWReturn(Image(0,"").fromContentValues(pContentValues!!))
+
+            println("image id: $id")
 
             if(id != 0.toLong()){
                 context!!.contentResolver.notifyChange(pUri,null)
