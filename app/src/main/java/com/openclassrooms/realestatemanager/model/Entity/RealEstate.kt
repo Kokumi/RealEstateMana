@@ -38,7 +38,7 @@ data class RealEstate(@PrimaryKey(autoGenerate = true) val id: Int = 0,
                       @ColumnInfo(name="priceId") var priceId : Int = 0
                       ) : Serializable{
 
-    fun fromContentValues(pValues : ContentValues) : RealEstate{
+    /*fun fromContentValues(pValues : ContentValues) : RealEstate{
         val item = RealEstate()
 
         if(pValues.containsKey("type")) item.type =pValues.getAsString("type")
@@ -51,6 +51,6 @@ data class RealEstate(@PrimaryKey(autoGenerate = true) val id: Int = 0,
         if(pValues.containsKey("dateVente")) item.dateVente = pValues.getAsString("dateVente")
 
         return item
-    }
+    }*/
 
 }

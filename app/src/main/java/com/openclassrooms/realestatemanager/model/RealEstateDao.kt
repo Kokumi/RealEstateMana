@@ -102,6 +102,6 @@ interface RealEstateDao {
         updateEstate(pRealEstate)
     }
 
-    @Delete
-    fun deleteImage(pId: Int) : Int
+   // @Delete
+   // fun deleteImage(pId: Int) : Int
 }

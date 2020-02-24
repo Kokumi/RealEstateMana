@@ -5,14 +5,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    tools:context="com.openclassrooms.realestatemanager.controller.MainActivity">
+    tools:context="com.openclassrooms.realestatemanager.controller.MainActivity"
+    tools:shrinkMode="strict">
 
 
 
     <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="top"
         >
         <view class="androidx.recyclerview.widget.RecyclerView"
             android:id="@+id/main_List"
@@ -26,6 +27,7 @@
         android:id="@+id/main_detail_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="150dp"
         > </FrameLayout>
 
 

@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.model.AppDatabase
 import com.openclassrooms.realestatemanager.model.Entity.Image
-import com.openclassrooms.realestatemanager.model.Entity.RealEstate
 import java.lang.IllegalArgumentException
 
 /**
@@ -16,9 +15,9 @@ import java.lang.IllegalArgumentException
  */
 class ItemContentProvider : ContentProvider() {
 
-    private val AUTHORITY = "com.openclassrooms.realestatemanager.provider"
-    private val TABLE_NAME = RealEstate::class.simpleName
-    private val URI_ITEM = Uri.parse("content://$AUTHORITY/$TABLE_NAME")
+    val AUTHORITY = "com.openclassrooms.realestatemanager.provider"
+    val TABLE_NAME = Image::class.simpleName
+    val URI_ITEM = Uri.parse("content://$AUTHORITY/$TABLE_NAME")
 
     override fun onCreate(): Boolean { return true }
 
@@ -28,7 +27,7 @@ class ItemContentProvider : ContentProvider() {
         if (this.context != null){
             val userId : Long = ContentUris.parseId(pUri)
             val db = Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build()
-            val cursor = db.realEstateDao().getRealEstateWithCursor(userId)
+            val cursor = db.realEstateDao().getImageWithCursor(userId)
             cursor.setNotificationUri(context!!.contentResolver, pUri)
 
             return cursor
@@ -43,6 +42,8 @@ class ItemContentProvider : ContentProvider() {
             val id : Long = Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build()
                     .realEstateDao().insertImageWReturn(Image(0,"").fromContentValues(pContentValues!!))
 
+            println("image id: $id")
+
             if(id != 0.toLong()){
                 context!!.contentResolver.notifyChange(pUri,null)
                 return ContentUris.withAppendedId(pUri,id)
@@ -53,12 +54,12 @@ class ItemContentProvider : ContentProvider() {
     }
 
     override fun delete(pUri: Uri, pString: String?, pArrayString: Array<String>?): Int {
-        if(context != null){
+        /*if(context != null){
             val count = Room.databaseBuilder(this.context!!, AppDatabase::class.java, "database").build()
                     .realEstateDao().deleteImage(ContentUris.parseId(pUri).toInt())
             context!!.contentResolver.notifyChange(pUri,null)
             return count
-        }
+        }*/
 
         throw IllegalArgumentException("Failed to delete row into: $pUri")
     }

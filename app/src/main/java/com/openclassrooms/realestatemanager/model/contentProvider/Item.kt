@@ -8,7 +8,7 @@ import android.content.ContentValues
 class Item(var userId : String = "",
            var text : String = "") {
 
-    fun fromContentValues(values: ContentValues): Item{
+    /*fun fromContentValues(values: ContentValues): Item{
                 var item : Item = Item()
                 /*if (values.containsKey("text")) item.setText(values.getAsString("text"))
                 if (values.containsKey("category")) item.setCategory(values.getAsInteger("category"))
@@ -16,5 +16,5 @@ class Item(var userId : String = "",
                 if (values.containsKey("userId")) item.setUserId(values.getAsLong("userId"))*/
                 return item;
 
-        }
+        }*/
     }
