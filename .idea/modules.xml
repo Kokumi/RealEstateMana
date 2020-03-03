@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RealEstateManager.iml" filepath="$PROJECT_DIR$/RealEstateManager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.iml" filepath="$PROJECT_DIR$/mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RealEstateManager.iml" filepath="$PROJECT_DIR$/RealEstateManager.iml" group="RealEstateManager" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="RealEstateManager/app" />
+      <module fileurl="file://$PROJECT_DIR$/mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.iml" filepath="$PROJECT_DIR$/mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.iml" group="RealEstateManager/mysql-connector-java-5.1.48" />
     </modules>
   </component>
 </project>

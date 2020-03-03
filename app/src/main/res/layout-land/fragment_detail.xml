@@ -5,25 +5,34 @@
     android:layout_height="match_parent"
     tools:context=".controller.DetailFragment">
 
-    <Button
-        android:id="@+id/fragment_edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:text="@string/fragment_button_edit"/>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/fragment_edit_bottom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/colorPrimary"
+        >
 
-    <Button
-        android:id="@+id/fragment_edit_new"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/fragment_edit_button"
-        android:layout_marginEnd="10dp"
-        android:text="@string/fragment_button_new"
-        />
+        <Button
+            android:id="@+id/fragment_edit_new"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/fragment_edit_button"
+            android:layout_alignParentBottom="true"
+            android:text="@string/fragment_button_new" />
+
+        <Button
+            android:id="@+id/fragment_edit_button"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/fragment_button_edit"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
 
     <FrameLayout
         android:id="@+id/fragment_warning_layout"
@@ -60,6 +69,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@id/fragment_media_title"
+        android:layout_toStartOf="@id/fragment_map"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"/>
 
@@ -130,7 +141,8 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_below="@id/fragment_media"
-        android:layout_margin="10dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
     <TextView
         android:id="@+id/fragment_description_text"
         android:layout_width="wrap_content"
@@ -185,7 +197,8 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="@string/fragment_agent"
-        android:layout_below="@id/fragment_room_text"
+        android:layout_below="@id/fragment_description_text"
+        android:layout_toEndOf="@id/fragment_location_title"
         android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"/>
     <TextView
@@ -194,6 +207,7 @@
         android:layout_height="wrap_content"
         android:text="@string/fragment_agent_base"
         android:layout_below="@id/fragment_agent_title"
+        android:layout_toEndOf="@id/fragment_location_title"
         android:layout_marginTop="3dp"
         android:layout_marginStart="20dp"/>
 
@@ -203,7 +217,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="@string/fragment_status"
-        android:layout_below="@id/fragment_room_text"
+        android:layout_below="@id/fragment_description_text"
         android:layout_toEndOf="@id/fragment_agent_title"
         android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"/>
@@ -250,7 +264,7 @@
     <TextView
         android:id="@+id/fragment_Interest_text"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="@string/fragment_interest_text"
         android:layout_below="@id/fragment_location_title"
         android:layout_marginStart="150dp"
@@ -258,11 +272,11 @@
 
     <ImageView
         android:id="@+id/fragment_map"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
-        android:layout_below="@id/fragment_edit_new"
+        android:layout_width="250dp"
+        android:layout_height="240dp"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/fragment_map_description"
         />

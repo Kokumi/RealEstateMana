@@ -11,13 +11,9 @@ import android.net.Uri
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -114,6 +110,40 @@ class DetailFragment : Fragment(), AsyncImageOutput {
         buttonConfig(view)
 
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val bottomBar : Toolbar = mView!!.findViewById(R.id.fragment_edit_bottom_toolbar)
+        val bottomMenu = bottomBar.menu
+        inflater.inflate(R.menu.fragment_menu, bottomMenu)
+
+        for(i in 1.. bottomMenu.size()){
+            bottomMenu.getItem(i).setOnMenuItemClickListener {
+               onOptionsItemSelected(it)
+            }
+        }
+        println("fragment menu")
+        inflater.inflate(R.menu.fragment_menu,menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+            R.id.bottom_edit -> { val intent = Intent(context,EditActivity::class.java)
+                intent.putExtra("SELECTION",realEstateData)
+                intent.putExtra("SELECTION_PRICE",priceData)
+                intent.putExtra("SELECTION_ADDRESS",addressData)
+                intent.putExtra("SELECTION_AGENT",agentData)
+                startActivity(intent) }
+
+            R.id.bottom_create ->{ val intent = Intent(context, EditActivity::class.java)
+            startActivity(intent) }
+
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     /**
