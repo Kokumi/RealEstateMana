@@ -13,22 +13,36 @@
         android:background="?attr/colorPrimary"
         >
 
-        <Button
-            android:id="@+id/fragment_edit_new"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@id/fragment_edit_button"
-            android:layout_alignParentBottom="true"
-            android:text="@string/fragment_button_new" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/fragment_edit_button"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="10dp"
-            android:text="@string/fragment_button_edit"/>
+            <ImageButton
+                android:id="@+id/fragment_edit_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@android:drawable/ic_menu_edit"
+                android:tint="@color/colorAccent"
+                android:background="@color/colorPrimary"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="30dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/fragment_button_edit"
+                />
+
+            <ImageButton
+                android:id="@+id/fragment_edit_new"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/colorPrimary"
+                android:tint="@color/colorAccent"
+                android:src="@android:drawable/ic_menu_add"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/fragment_button_new"/>
+        </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
 

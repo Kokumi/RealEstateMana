@@ -222,8 +222,8 @@ class DetailFragment : Fragment(), AsyncImageOutput {
      * configuration of all button
      */
     private fun buttonConfig(pView: View){
-        val editButton = pView.findViewById(R.id.fragment_edit_button) as Button
-        val createButton = pView.findViewById(R.id.fragment_edit_new) as Button
+        val editButton = pView.findViewById(R.id.fragment_edit_button) as ImageButton
+        val createButton = pView.findViewById(R.id.fragment_edit_new) as ImageButton
 
         // button to edit selected real estate
         editButton.setOnClickListener{
