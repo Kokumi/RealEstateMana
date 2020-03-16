@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
 import com.openclassrooms.realestatemanager.R
@@ -17,8 +18,9 @@ class MediaImageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_image)
 
-        val actionBar = actionBar
-        actionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        /*val actionBar = actionBar
+        actionBar!!.setDisplayHomeAsUpEnabled(true)*/
 
         // get selected image from intent
         mBitmap = if(intent.extras?.get("IMAGE") != null) BitmapFactory.decodeFile(intent.extras?.get("IMAGE") as String)
@@ -33,4 +35,12 @@ class MediaImageActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        if(item!!.itemId == android.R.id.home){
+            finish()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 }
