@@ -50,11 +50,9 @@
         <activity
             android:name=".controller.EditActivity"
             android:label="@string/title_activity_edit"
-            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.MainActivity"
-            android:screenOrientation="landscape">
+            android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

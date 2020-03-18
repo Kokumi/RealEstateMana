@@ -261,7 +261,7 @@
         android:text="@string/fragment_location_base" />
 
     <TextView
-        android:id="@+id/fragment_interest_title"
+        android:id="@+id/fragment_Interest_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
@@ -270,11 +270,11 @@
         android:layout_marginEnd="50dp"
         android:layout_toStartOf="@id/fragment_location_title" />
     <TextView
-        android:id="@+id/fragment_interest_text"
+        android:id="@+id/fragment_Interest_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fragment_interest_text"
-        android:layout_below="@id/fragment_interest_title"
+        android:layout_below="@id/fragment_Interest_title"
         android:layout_marginEnd="50dp"
         android:layout_toStartOf="@id/fragment_location_title"/>
 
