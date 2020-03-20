@@ -46,9 +46,10 @@ public class ExampleInstrumentedTest {
         assertTrue(Utils.isInternetAvailable(InstrumentationRegistry.getTargetContext()));
     }
 
-    /*private ContentResolver mContentResolver;
+    private ContentResolver mContentResolver;
 
     private static long USER_ID = 1;
+
 
     @Before
     public void setUp(){
@@ -60,26 +61,28 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void insertAndGetItem(){
-        final Uri userUri = mContentResolver.insert(
+        /*final Uri userUri = mContentResolver.insert(
                 Uri.parse("content://com.openclassrooms.realestatemanager.provider/"+ Image.class.getSimpleName()),
-                generateItem());
+                generateItem());*/
 
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(
                 Uri.parse("content://com.openclassrooms.realestatemanager.provider/"+ Image.class.getSimpleName()), USER_ID),
                 null,null,null,null);
 
         //assertThat(cursor, );
-        assertEquals(1,cursor.getCount());
         assertTrue(cursor.moveToFirst());
-        assertSame("some",cursor.getString(cursor.getColumnIndexOrThrow("uri")));
+        //assertSame("some",cursor.getString(cursor.getColumnIndexOrThrow("uri")));
+        assertFalse(cursor.isNull(1));
     }
 
 
     private ContentValues generateItem(){
         final ContentValues values = new ContentValues();
-        values.put("id","14");
+        values.put("id","1");
         values.put("uri","some");
 
         return values;
-    }*/
+    }
+
+
 }
